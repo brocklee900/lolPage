@@ -1,9 +1,15 @@
 const express = require("express");
-const app = express();
+const path = require("path");
 const lolStaticRouter = require("./routes/lolStaticRouter");
+
+const app = express();
 
 app.use("/lolStatic", lolStaticRouter);
 
+app.use(express.static(path.join(__dirname, "../frontend")));
+app.get(/.*/, (req, res) => { //needs a regex for the catchall. Doesn't like "*"
+    res.sendFile(path.join(__dirname), "../frontend/index.html");
+});
 
 const PORT = 3000;
 app.listen(PORT, (error) => {
