@@ -1,12 +1,10 @@
 
 const { Router } = require("express");
+const { getSplashURL } = require("../controllers/lolStaticController");
 
 const lolStaticRouter = Router();
 
-lolStaticRouter.get("/:championName", (req, res) => {
-    const {championName} = req.params;
-    res.send(`Champion: ${championName}`);
-});
+lolStaticRouter.get("/champion/:championName", getSplashURL);
 lolStaticRouter.get("/", (req, res) => res.send("championName"));
 
 module.exports = lolStaticRouter;

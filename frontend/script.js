@@ -1,9 +1,10 @@
 
 async function testAPI(championName) {
-    const response = await fetch(`/lolStatic/${championName}`);
-    console.log(response);
+    const response = await fetch(`/lolStatic/champion/${championName}`);
     const data = await response.text();
-    console.log(data);
+
+    const img = document.querySelector(".splash");
+    img.src = data;
 }
 
-testAPI("Aatrox");
+testAPI("Zoe");
