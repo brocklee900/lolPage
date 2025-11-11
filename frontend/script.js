@@ -1,5 +1,5 @@
 
-async function testAPI(championName) {
+async function testLolStatic(championName) {
     const response = await fetch(`/lolStatic/champion/${championName}`);
     const data = await response.text();
 
@@ -7,4 +7,14 @@ async function testAPI(championName) {
     img.src = data;
 }
 
-testAPI("Zoe");
+testLolStatic("Zoe");
+
+async function testSupabase(championName, num) {
+    const response = await fetch(`/supabase/champion/${championName}/emote/${num}`);
+    const data = await response.json();
+
+    const video = document.querySelector(".gif");
+    video.src = data.publicUrl;
+}
+
+testSupabase("Aatrox", 4);

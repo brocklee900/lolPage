@@ -1,0 +1,11 @@
+
+const { Router } = require("express");
+const supabaseController = require("../controllers/supabaseController");
+
+const supabaseRouter = Router();
+
+supabaseRouter.get("/champion/:championName/emote/:num",
+     supabaseController.getChampionEmote);
+supabaseRouter.get("/", (req, res) => res.send("Empty request to supabase"));
+
+module.exports = supabaseRouter;
