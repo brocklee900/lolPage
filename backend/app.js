@@ -11,9 +11,18 @@ const app = express();
 app.use("/lolStatic", lolStaticRouter);
 app.use("/supabase", supabaseRouter);
 
-app.use(express.static(path.join(__dirname, "../frontend")));
+//page routing
+app.use(express.static(path.join(__dirname, "../frontend/dist"))); //loads index.html by default when page loads
+app.get("/champions", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist/champions.html"));
+});
+
+app.get("/quiz", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist/quiz.html"));
+});
+
 app.get(/.*/, (req, res) => { //needs a regex for the catchall. Doesn't like "*"
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 const PORT = 3000;

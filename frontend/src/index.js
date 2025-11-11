@@ -1,4 +1,6 @@
 
+import "./index.css";
+
 async function testLolStatic(championName) {
     const response = await fetch(`/lolStatic/champion/${championName}`);
     const data = await response.text();
