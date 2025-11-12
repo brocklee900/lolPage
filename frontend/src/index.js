@@ -10,13 +10,3 @@ async function testLolStatic(championName) {
 }
 
 testLolStatic("Zoe");
-
-async function testSupabase(championName, num) {
-    const response = await fetch(`/supabase/champion/${championName}/emote/${num}`);
-    const data = await response.json();
-
-    const video = document.querySelector(".gif");
-    video.src = data.publicUrl;
-}
-
-testSupabase("Aatrox", 4);
