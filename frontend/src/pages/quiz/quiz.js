@@ -1,5 +1,5 @@
 import "./quiz.css";
-import { testSupabase } from "./supabase";
+import { testSupabase } from "../../scripts/supabase";
 
 const params = new URLSearchParams(window.location.search);
 

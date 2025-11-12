@@ -5,9 +5,9 @@ const path = require("path");
 module.exports = {
     mode: "development",
     entry: {
-        index: "./src/index.js",
-        champions: "./src/champions.js",
-        quiz: "./src/quiz.js",
+        index: "./src/pages//index/index.js",
+        champions: "./src/pages/champions/champions.js",
+        quiz: "./src/pages/quiz/quiz.js",
     },
     output: {
         filename: "[name].bundle.js",
@@ -16,17 +16,17 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./src/index.html",
+            template: "./src/pages/index/index.html",
             filename: "index.html",
             chunks: ["index"],
         }),
         new HtmlWebpackPlugin({
-            template: "./src/champions.html",
+            template: "./src/pages/champions/champions.html",
             filename: "champions.html",
             chunks: ["champions"],
         }),
         new HtmlWebpackPlugin({
-            template: "./src/quiz.html",
+            template: "./src/pages/quiz/quiz.html",
             filename: "quiz.html",
             chunks: ["quiz"],
         }),

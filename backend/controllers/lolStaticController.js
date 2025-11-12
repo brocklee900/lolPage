@@ -1,14 +1,23 @@
 
 const fetch = require("node-fetch");
-const baseURL = "http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions"
+const baseUrl = "http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions"
 
 async function getSplashURL(req, res) {
-    const { championName } = req.params;
+    const { championName, num } = req.params;
 
-    const response = await fetch(`${baseURL}/${championName}.json`);
+    const response = await fetch(`${baseUrl}/${championName}.json`);
     const data = await response.json();
-    const splash = data.skins[0].splashPath;
+    const splash = data.skins[num].splashPath;
     res.send(splash);
 }
 
-module.exports = {getSplashURL};
+async function getLoadingSplashUrl(req, res) {
+    const { championName, num } = req.params;
+
+    const response = await fetch(`${baseUrl}/${championName}.json`);
+    const data = await response.json();
+    const loadingSplash = data.skins[num].loadScreenPath;
+    res.send(loadingSplash);
+}
+
+module.exports = {getSplashURL, getLoadingSplashUrl};
