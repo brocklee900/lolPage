@@ -6,6 +6,13 @@ async function getSplashUrl(championName, num) {
     return data;
 }
 
+async function getRandomSplashUrl(championName) {
+    const response = await fetch(`/lolStatic/splash/random/${championName}`);
+    const data = await response.text();
+
+    return data;
+}
+
 async function getLoadingSplashUrl(championName, num) {
     const response = await fetch(`/lolStatic/loadScreenSplash/${championName}/${num}`);
     const data = await response.text();
@@ -14,4 +21,8 @@ async function getLoadingSplashUrl(championName, num) {
 }
 
 
-export {getSplashUrl, getLoadingSplashUrl};
+export {
+    getSplashUrl,
+    getRandomSplashUrl,
+    getLoadingSplashUrl
+};

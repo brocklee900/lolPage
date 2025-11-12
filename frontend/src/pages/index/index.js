@@ -1,5 +1,5 @@
 
 import "./index.css";
-import { getSplashUrl } from "../../scripts/lolStatic";
+import { getSplashUrl, getRandomSplashUrl } from "../../scripts/lolStatic";
 
-document.querySelector(".splash").src = await getSplashUrl("Zoe", 4);
+document.querySelector(".splash").src = await getRandomSplashUrl("Zoe");
