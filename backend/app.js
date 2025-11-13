@@ -4,6 +4,7 @@ const express = require("express");
 const path = require("path");
 const lolStaticRouter = require("./routes/lolStaticRouter");
 const supabaseRouter = require("./routes/supabaseRouter");
+const { preloadChampions } = require("./controllers/lolStaticController");
 
 
 const app = express();
@@ -24,6 +25,8 @@ app.get("/quiz", (req, res) => {
 app.get(/.*/, (req, res) => { //needs a regex for the catchall. Doesn't like "*"
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
+
+preloadChampions(); //start loading lolstatic champion cache before server starts
 
 const PORT = 3000;
 app.listen(PORT, (error) => {
