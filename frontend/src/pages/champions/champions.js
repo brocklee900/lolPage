@@ -1,10 +1,13 @@
 import "./champions.css";
-import { getLoadingSplashUrl } from "../../scripts/lolStatic";
+import { getAllLoadingSplash } from "../../scripts/lolStatic";
 
 const body = document.querySelector("body");
-let img = document.createElement("img");
-body.appendChild(img);
-img.src = await getLoadingSplashUrl("Aatrox", 0);
 
+const splashArts = await getAllLoadingSplash();
+Object.keys(splashArts).forEach((key) => {
+    let img = document.createElement("img");
+    body.appendChild(img);
+    img.src = splashArts[key];
+});
 
 console.log("championsPage");

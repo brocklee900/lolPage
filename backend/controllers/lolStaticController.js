@@ -16,14 +16,13 @@ async function timeoutTest() {
 }
 
 async function preloadChampions() {
-    await timeoutTest();
+    //await timeoutTest();
     const response = await fetch(`${baseUrl}.json`);
     const data = await response.json();
 
     Object.keys(data).forEach(key => {
         cache.set(key, data[key]);
     });
-
 }
 
 async function getChampionData(championName) {
@@ -37,6 +36,7 @@ async function getChampionData(championName) {
         return data;
     }
 }
+
 
 async function getSplashUrl(req, res) {
     const { championName, num } = req.params;
@@ -63,9 +63,23 @@ async function getLoadingSplashUrl(req, res) {
     res.send(loadingSplash);
 }
 
+async function getAllLoadingSplash(req, res) {
+    if (cache.keys().length == 0) {
+        await preloadChampions();
+    }
+
+    const data = {};
+    cache.keys().forEach(key => {
+        data[key] = cache.get(key).skins[0].loadScreenPath;
+    });
+
+    res.json(data);
+}
+
 module.exports = {
     preloadChampions,
     getSplashUrl,
     getRandomSplashUrl,
+    getAllLoadingSplash,
     getLoadingSplashUrl,
 };

@@ -1,10 +1,4 @@
 
-async function preloadChampions() {
-    const response = await fetch(`/lolStatic/preload`);
-    const data = await response.json();
-    console.log(data);
-}
-
 async function getSplashUrl(championName, num) {
     const response = await fetch(`/lolStatic/splash/${championName}/${num}`);
     const data = await response.text();
@@ -19,6 +13,13 @@ async function getRandomSplashUrl(championName) {
     return data;
 }
 
+async function getAllLoadingSplash() {
+    const response = await fetch(`lolStatic/loadScreenSplash/all`);
+    const data = await response.json();
+
+    return data;
+}
+
 async function getLoadingSplashUrl(championName, num) {
     const response = await fetch(`/lolStatic/loadScreenSplash/${championName}/${num}`);
     const data = await response.text();
@@ -28,8 +29,8 @@ async function getLoadingSplashUrl(championName, num) {
 
 
 export {
-    preloadChampions,
     getSplashUrl,
     getRandomSplashUrl,
+    getAllLoadingSplash,
     getLoadingSplashUrl,
 };
