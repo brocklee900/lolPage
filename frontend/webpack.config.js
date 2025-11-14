@@ -5,7 +5,7 @@ const path = require("path");
 module.exports = {
     mode: "development",
     entry: {
-        index: "./src/pages//index/index.js",
+        index: "./src/pages/index/index.js",
         champions: "./src/pages/champions/champions.js",
         quiz: "./src/pages/quiz/quiz.js",
     },

@@ -27,10 +27,18 @@ async function getLoadingSplashUrl(championName, num) {
     return data;
 }
 
+async function getChampionIcon(championName) {
+    const response = await fetch(`/lolStatic/icon/${championName}`);
+    const data = await response.text();
+
+    return data;
+}
+
 
 export {
     getSplashUrl,
     getRandomSplashUrl,
     getAllLoadingSplash,
     getLoadingSplashUrl,
+    getChampionIcon,
 };

@@ -55,14 +55,6 @@ async function getRandomSplashUrl(req, res) {
     res.send(splash);
 }
 
-async function getLoadingSplashUrl(req, res) {
-    const { championName, num } = req.params;
-
-    const data = await getChampionData(championName);
-    const loadingSplash = data.skins[num].loadScreenPath;
-    res.send(loadingSplash);
-}
-
 async function getAllLoadingSplash(req, res) {
     if (cache.keys().length == 0) {
         await preloadChampions();
@@ -76,10 +68,27 @@ async function getAllLoadingSplash(req, res) {
     res.json(data);
 }
 
+async function getLoadingSplashUrl(req, res) {
+    const { championName, num } = req.params;
+
+    const data = await getChampionData(championName);
+    const loadingSplash = data.skins[num].loadScreenPath;
+    res.send(loadingSplash);
+}
+
+async function getChampionIcon(req, res) {
+    const { championName } = req.params;
+
+    const data = await getChampionData(championName);
+    const icon = data.icon;
+    res.send(icon);
+}
+
 module.exports = {
     preloadChampions,
     getSplashUrl,
     getRandomSplashUrl,
     getAllLoadingSplash,
     getLoadingSplashUrl,
+    getChampionIcon,
 };

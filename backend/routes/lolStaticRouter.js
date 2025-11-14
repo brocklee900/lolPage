@@ -8,6 +8,7 @@ lolStaticRouter.get("/splash/random/:championName", lolStaticController.getRando
 lolStaticRouter.get("/splash/:championName/:num", lolStaticController.getSplashUrl);
 lolStaticRouter.get("/loadScreenSplash/all", lolStaticController.getAllLoadingSplash);
 lolStaticRouter.get("/loadScreenSplash/:championName/:num", lolStaticController.getLoadingSplashUrl);
+lolStaticRouter.get("/icon/:championName", lolStaticController.getChampionIcon);
 lolStaticRouter.get("/", (req, res) => res.send("championName"));
 
 module.exports = lolStaticRouter;
