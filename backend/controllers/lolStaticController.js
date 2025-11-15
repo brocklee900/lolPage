@@ -37,13 +37,12 @@ async function getChampionData(championName) {
     }
 }
 
-
 async function getSplashUrl(req, res) {
     const { championName, num } = req.params;
 
     const data = await getChampionData(championName);
     const splash = data.skins[num].splashPath;
-    res.send(splash);
+    res.json({data: splash});
 }
 
 async function getRandomSplashUrl(req, res) {
@@ -52,7 +51,7 @@ async function getRandomSplashUrl(req, res) {
     const data = await getChampionData(championName);
     let num = randInt(data.skins.length);
     const splash = data.skins[num].splashPath;
-    res.send(splash);
+    res.json({data: splash});
 }
 
 async function getAllLoadingSplash(req, res) {
@@ -73,7 +72,7 @@ async function getLoadingSplashUrl(req, res) {
 
     const data = await getChampionData(championName);
     const loadingSplash = data.skins[num].loadScreenPath;
-    res.send(loadingSplash);
+    res.json({data: loadingSplash});
 }
 
 async function getChampionIcon(req, res) {
@@ -81,7 +80,7 @@ async function getChampionIcon(req, res) {
 
     const data = await getChampionData(championName);
     const icon = data.icon;
-    res.send(icon);
+    res.json({data: icon});
 }
 
 module.exports = {

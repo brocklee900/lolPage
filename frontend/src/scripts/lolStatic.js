@@ -1,37 +1,37 @@
 
 async function getSplashUrl(championName, num) {
     const response = await fetch(`/lolStatic/splash/${championName}/${num}`);
-    const data = await response.text();
+    const data = await response.json();
 
-    return data;
+    return data.data;
 }
 
 async function getRandomSplashUrl(championName) {
     const response = await fetch(`/lolStatic/splash/random/${championName}`);
-    const data = await response.text();
+    const data = await response.json();
 
-    return data;
+    return data.data;
 }
 
 async function getAllLoadingSplash() {
     const response = await fetch(`lolStatic/loadScreenSplash/all`);
     const data = await response.json();
 
-    return data;
+    return data.data;
 }
 
 async function getLoadingSplashUrl(championName, num) {
     const response = await fetch(`/lolStatic/loadScreenSplash/${championName}/${num}`);
-    const data = await response.text();
+    const data = await response.json();
 
-    return data;
+    return data.data;
 }
 
 async function getChampionIcon(championName) {
     const response = await fetch(`/lolStatic/icon/${championName}`);
-    const data = await response.text();
+    const data = await response.json();
 
-    return data;
+    return data.data;
 }
 
 
