@@ -1,13 +1,20 @@
 import "./quiz.css";
 import { testSupabase } from "../../scripts/supabase";
 import { getChampionIcon } from "../../scripts/lolStatic";
+import { createPlaceholder } from "../../scripts/error";
 
 const params = new URLSearchParams(window.location.search);
 console.log(params.get("champion"));
 
 const body = document.querySelector("body");
 const icon = document.createElement("img");
-icon.src = await getChampionIcon(params.get("champion"));
+const data = await getChampionIcon(params.get("champion"));
+if (data) {
+    icon.src = data.data;
+} else {
+    icon.src = data;
+}
+icon.onerror = createPlaceholder;
 body.appendChild(icon);
 
 const p = document.createElement("p");
