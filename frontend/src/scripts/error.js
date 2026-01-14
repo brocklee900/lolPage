@@ -9,9 +9,9 @@ function createPlaceholderDiv() {
     return div;
 }
 
-function createPlaceholder() {
+function createPlaceholder() { //called as a function set to onerror
     const div = createPlaceholderDiv();
-    this.replaceWith(div);
+    this.replaceWith(div); //this is set to the onerror's element
 }
 
 function getPlaceholder() {
