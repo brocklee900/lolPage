@@ -34,7 +34,7 @@ body.appendChild(video);
 
 const questionData = await getQuestions('Aatrox');
 console.log('QuestionData');
-console.log(questionData[0]);
+console.log(questionData);
 
 
 

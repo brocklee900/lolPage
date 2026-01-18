@@ -14,10 +14,10 @@ async function getChampionEmote(req, res) {
     res.send(data);
 }
 
-async function getQuestion(req, res) {
+async function getQuestions(req, res) {
     const {championName} = req.params;
 
-    const {data, error} = await supabase
+    const {data: dataNamed, error: errorNamed } = await supabase
         .from('questions')
         .select(
             `question_text,
@@ -33,12 +33,29 @@ async function getQuestion(req, res) {
             )`
         )
         .eq('champions.champion_name', championName);
+    
+    const {data: dataGeneral, error: errorGeneral} = await supabase
+        .from('questions')
+        .select(
+            `question_text,
+            answer_source,
+            answer_endpoint,
+            champions(
+                champion_name
+            ),
+            answers(
+                id,
+                answer_text,
+                is_correct
+            )`
+        )
+        .is('champion_id', null);
 
-    res.json(data);
+    res.json([...dataNamed, ...dataGeneral]);
 }
 
 module.exports = {
     getChampionEmote,
-    getQuestion,
+    getQuestions,
     
 };
