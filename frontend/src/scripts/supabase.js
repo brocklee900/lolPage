@@ -1,10 +1,29 @@
 
+async function fetchData(url) {
 
-async function testSupabase(championName, num) {
-    const response = await fetch(`/supabase/champion/${championName}/emote/${num}`);
-    const data = await response.json();
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
 
-    return data.publicUrl;
+        if (!response.ok) {
+            throw new Error(data.message);
+        };
+
+        return data;
+    } catch (err) {
+        console.log("ERROR MESSAGE: ", err.message);
+        alert(err.message);
+        return undefined;
+    }
 }
 
-export {testSupabase};
+async function testSupabase(championName, num) {
+
+    return await fetchData(`/supabase/champion/${championName}/emote/${num}`).publicUrl;
+}
+
+async function getQuestions(championName) {
+    return await fetchData(`supabase/question/${championName}`);
+}
+
+export {testSupabase, getQuestions};

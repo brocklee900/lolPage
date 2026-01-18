@@ -14,4 +14,31 @@ async function getChampionEmote(req, res) {
     res.send(data);
 }
 
-module.exports = {getChampionEmote};
+async function getQuestion(req, res) {
+    const {championName} = req.params;
+
+    const {data, error} = await supabase
+        .from('questions')
+        .select(
+            `question_text,
+            answer_source,
+            answer_endpoint,
+            champions!inner(
+                champion_name
+            ),
+            answers(
+                id,
+                answer_text,
+                is_correct
+            )`
+        )
+        .eq('champions.champion_name', championName);
+
+    res.json(data);
+}
+
+module.exports = {
+    getChampionEmote,
+    getQuestion,
+    
+};

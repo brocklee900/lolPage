@@ -1,6 +1,6 @@
 import "./quiz.css";
-import { testSupabase } from "../../scripts/supabase";
-import { getChampionIcon } from "../../scripts/lolStatic";
+import { testSupabase, getQuestions } from "../../scripts/supabase";
+import { getChampionIcon, getData } from "../../scripts/lolStatic";
 import { createPlaceholder } from "../../scripts/error";
 
 const params = new URLSearchParams(window.location.search);
@@ -30,6 +30,13 @@ video.loop = true;
 video.muted = true;
 video.classList.add("gif");
 body.appendChild(video);
+
+
+const questionData = await getQuestions('Aatrox');
+console.log('QuestionData');
+console.log(questionData[0]);
+
+
 
 
 

@@ -6,6 +6,8 @@ const supabaseRouter = Router();
 
 supabaseRouter.get("/champion/:championName/emote/:num",
      supabaseController.getChampionEmote);
+supabaseRouter.get("/question/:championName",
+     supabaseController.getQuestion);
 supabaseRouter.get("/", (req, res) => res.send("Empty request to supabase"));
 
 module.exports = supabaseRouter;

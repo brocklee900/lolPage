@@ -41,6 +41,10 @@ async function getChampionIcon(championName) {
     return await fetchData(`/lolStatic/icon/${championName}`);
 }
 
+async function getData(championName, url) {
+    console.log(url);
+}
+
 
 export {
     getSplashUrl,
@@ -48,4 +52,5 @@ export {
     getAllLoadingSplash,
     getLoadingSplashUrl,
     getChampionIcon,
+    getData,
 };
