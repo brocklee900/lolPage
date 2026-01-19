@@ -3,6 +3,10 @@ const fetch = require("node-fetch");
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
+const randInt = (length) => {
+    return Math.floor(Math.random() * (length));
+}
+
 async function getChampionEmote(req, res) {
     const {championName, num} = req.params;
 
@@ -14,9 +18,7 @@ async function getChampionEmote(req, res) {
     res.send(data);
 }
 
-async function getQuestions(req, res) {
-    const {championName} = req.params;
-
+async function queryQuestions(championName) {
     const {data: dataNamed, error: errorNamed } = await supabase
         .from('questions')
         .select(
@@ -50,12 +52,24 @@ async function getQuestions(req, res) {
             )`
         )
         .is('champion_id', null);
+    
+    return [...dataNamed, ...dataGeneral];
+}
 
-    res.json([...dataNamed, ...dataGeneral]);
+async function getQuestions(req, res) {
+    const {championName} = req.params;
+    const data = await queryQuestions(championName);
+    res.json(data);
+}
+
+async function getRandomQuestion(req, res) {
+    const {championName} = req.params;
+    const data = await queryQuestions(championName);
+    res.json(data[randInt(data.length)]);
 }
 
 module.exports = {
     getChampionEmote,
     getQuestions,
-    
+    getRandomQuestion,
 };
