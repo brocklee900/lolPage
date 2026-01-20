@@ -3,8 +3,38 @@ import { testSupabase, getQuestions, getRandomQuestion } from "../../scripts/sup
 import { getChampionIcon } from "../../scripts/lolStatic";
 import { createPlaceholder } from "../../scripts/error";
 
+const createAnswerBox = (answer) => {
+    const answerDisplay = document.querySelector('#answerDisplay');
+    let div = document.createElement('div');
+    div.classList.add("answerBox");
+    let text = document.createElement('p');
+    text.textContent = answer.answer_text;
+    div.appendChild(text);
+    answerDisplay.appendChild(div);
+}
+
+const displayQuestion = (questionData) => {
+    const qText = document.querySelector('#questionDisplay p');
+
+    console.log(questionData);
+    if (questionData.answer_source == 'database') {
+        console.log('Pull data from supabase');
+        qText.textContent = questionData.question_text;
+        for (const answer of questionData.answers) {
+            createAnswerBox(answer);
+        }
+    } else {
+        console.log('Pull data from lolstatic');
+    }
+}
+
+//When accessing quiz page, a champion must be included in the url params
+//This will determine which questions to retrieve, 
+//as they should pertain to the champion specified
 const params = new URLSearchParams(window.location.search);
-console.log(params.get("champion"));
+console.log(params.get("champion")); 
+
+
 
 const body = document.querySelector("body");
 const icon = document.createElement("img");
@@ -32,13 +62,10 @@ video.classList.add("gif");
 body.appendChild(video);
 
 
-const questionData = await getQuestions('Aatrox');
-console.log('QuestionData');
-console.log(questionData);
-
 const randQuestion = await getRandomQuestion(`Aatrox`);
-console.log('Random Question');
-console.log(randQuestion);
+displayQuestion(randQuestion);
+
+
 
 
 
