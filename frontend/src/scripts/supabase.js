@@ -18,8 +18,7 @@ async function fetchData(url) {
 }
 
 async function testSupabase(championName, num) {
-
-    return await fetchData(`/supabase/champion/${championName}/emote/${num}`).publicUrl;
+    return await fetchData(`/supabase/champion/${championName}/emote/${num}`);
 }
 
 async function getQuestions(championName) {

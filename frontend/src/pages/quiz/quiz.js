@@ -1,19 +1,25 @@
 import "./quiz.css";
 import { testSupabase, getQuestions, getRandomQuestion } from "../../scripts/supabase";
-import { getChampionIcon } from "../../scripts/lolStatic";
+import { getChampionIcon, getAnswerData } from "../../scripts/lolStatic";
 import { createPlaceholder } from "../../scripts/error";
 
-const createAnswerBox = (answer) => {
+//When accessing quiz page, a champion must be included in the url params
+//This will determine which questions to retrieve, 
+//as they should pertain to the champion specified
+const params = new URLSearchParams(window.location.search);
+const championName = (params.get("champion")); 
+
+const createAnswerBox = (answer_text) => {
     const answerDisplay = document.querySelector('#answerDisplay');
     let div = document.createElement('div');
     div.classList.add("answerBox");
     let text = document.createElement('p');
-    text.textContent = answer.answer_text;
+    text.textContent = answer_text;
     div.appendChild(text);
     answerDisplay.appendChild(div);
 }
 
-const displayQuestion = (questionData) => {
+async function displayQuestion(questionData) {
     const qText = document.querySelector('#questionDisplay p');
 
     console.log(questionData);
@@ -21,24 +27,20 @@ const displayQuestion = (questionData) => {
         console.log('Pull data from supabase');
         qText.textContent = questionData.question_text;
         for (const answer of questionData.answers) {
-            createAnswerBox(answer);
+            createAnswerBox(answer.answer_text);
         }
     } else {
+        qText.textContent = questionData.question_text.replace("{championName}", championName);
         console.log('Pull data from lolstatic');
+        let answer_endpoint = questionData.answer_endpoint.replace("{championName}", championName);
+        let answer = await getAnswerData(answer_endpoint);
+        createAnswerBox(answer.data);
     }
 }
 
-//When accessing quiz page, a champion must be included in the url params
-//This will determine which questions to retrieve, 
-//as they should pertain to the champion specified
-const params = new URLSearchParams(window.location.search);
-console.log(params.get("champion")); 
-
-
-
 const body = document.querySelector("body");
 const icon = document.createElement("img");
-const data = await getChampionIcon(params.get("champion"));
+const data = await getChampionIcon(championName);
 if (data) {
     icon.src = data.data; //data exists
 } else {
@@ -48,12 +50,12 @@ icon.onerror = createPlaceholder;
 body.appendChild(icon);
 
 const p = document.createElement("p");
-p.textContent = params.get("champion");
+p.textContent = championName;
 body.appendChild(p);
 
 const video = document.createElement("video");
-const videodata = await testSupabase(params.get("champion"), 3);
-video.src = videodata;
+const videodata = await testSupabase(championName, 1);
+video.src = videodata.publicUrl;
 video.onerror = createPlaceholder;
 video.autoplay = true;
 video.loop = true;
@@ -62,8 +64,8 @@ video.classList.add("gif");
 body.appendChild(video);
 
 
-const randQuestion = await getRandomQuestion(`Aatrox`);
-displayQuestion(randQuestion);
+const randQuestion = await getRandomQuestion(championName);
+await displayQuestion(randQuestion);
 
 
 

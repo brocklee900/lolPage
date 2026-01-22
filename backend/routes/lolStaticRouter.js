@@ -9,6 +9,7 @@ lolStaticRouter.get("/splash/:championName/:num", lolStaticController.getSplashU
 lolStaticRouter.get("/loadScreenSplash/all", lolStaticController.getAllLoadingSplash);
 lolStaticRouter.get("/loadScreenSplash/:championName/:num", lolStaticController.getLoadingSplashUrl);
 lolStaticRouter.get("/icon/:championName", lolStaticController.getChampionIcon);
+lolStaticRouter.get("/ability/:championName/:key", lolStaticController.getChampionAbility);
 lolStaticRouter.get("/testError", (req, res) => {
     let status = 400;
     res.status(status).json({

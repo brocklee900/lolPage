@@ -120,6 +120,17 @@ async function getChampionIcon(req, res) {
     }
 }
 
+async function getChampionAbility(req, res) {
+    const {championName, key } = req.params;
+    try {
+        const data = await getChampionData(championName);
+        const ability = data.abilities[key.toUpperCase()][0].name;
+        res.json({data: ability});
+    } catch (error) {
+        sendError(res, "Failed to get ability name");
+    }
+}
+
 module.exports = {
     preloadChampions,
     getSplashUrl,
@@ -127,4 +138,5 @@ module.exports = {
     getAllLoadingSplash,
     getLoadingSplashUrl,
     getChampionIcon,
+    getChampionAbility,
 };
