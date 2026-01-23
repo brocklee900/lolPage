@@ -1,5 +1,5 @@
 import "./quiz.css";
-import { testSupabase, getQuestions, getRandomQuestion } from "../../scripts/supabase";
+import { testSupabase, getQuestions, getRandomQuestion, getRandomQuestionSet } from "../../scripts/supabase";
 import { getChampionIcon, getAnswerData } from "../../scripts/lolStatic";
 import { createPlaceholder } from "../../scripts/error";
 
@@ -21,6 +21,7 @@ const createAnswerBox = (answer_text) => {
 
 async function displayQuestion(questionData) {
     const qText = document.querySelector('#questionDisplay p');
+    document.querySelector('#answerDisplay').replaceChildren();
 
     console.log(questionData);
     if (questionData.answer_source == 'database') {
@@ -64,8 +65,13 @@ video.classList.add("gif");
 body.appendChild(video);
 
 
-const randQuestion = await getRandomQuestion(championName);
-await displayQuestion(randQuestion);
+//const randQuestion = await getRandomQuestion(championName);
+//await displayQuestion(randQuestion);
+
+const randQuestionSet = await getRandomQuestionSet(championName, 4);
+for (const q of randQuestionSet) {
+    await displayQuestion(q);
+}
 
 
 

@@ -29,4 +29,8 @@ async function getRandomQuestion(championName) {
     return await fetchData(`supabase/question/random/${championName}`);
 }
 
-export {testSupabase, getQuestions, getRandomQuestion};
+async function getRandomQuestionSet(championName, num) {
+    return await fetchData(`supabase/question/set/${championName}/${num}`);
+}
+
+export {testSupabase, getQuestions, getRandomQuestion, getRandomQuestionSet};

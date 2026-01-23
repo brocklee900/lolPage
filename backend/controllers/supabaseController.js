@@ -56,6 +56,20 @@ async function queryQuestions(championName) {
     return [...dataNamed, ...dataGeneral];
 }
 
+function randomSet(data, n) {
+    const used = new Set();
+    const result = [];
+
+    while (result.length < n && result.length < data.length) {
+        const i = randInt(data.length);
+        if (!used.has(i)) {
+            used.add(i);
+            result.push(data[i]);
+        }
+    }
+    return result;
+}
+
 async function getQuestions(req, res) {
     const {championName} = req.params;
     const data = await queryQuestions(championName);
@@ -68,8 +82,15 @@ async function getRandomQuestion(req, res) {
     res.json(data[randInt(data.length)]);
 }
 
+async function getRandomQuestionSet(req, res) {
+    const {championName, num} = req.params;
+    const data = await queryQuestions(championName);
+    res.json(randomSet(data, num));
+}
+
 module.exports = {
     getChampionEmote,
     getQuestions,
     getRandomQuestion,
+    getRandomQuestionSet,
 };
