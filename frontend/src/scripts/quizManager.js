@@ -10,12 +10,11 @@ function createQuiz(name) {
 
     async function createQuestionSet(numQuestions) {
         questionSet = await getRandomQuestionSet(championName, numQuestions);
-        console.log(typeof(questionSet));
         currentQuestion = 0;
     }
 
     function getNextQuestion() {
-        if (currentQuestion < questionSet.length) {
+        if (questionSet && currentQuestion < questionSet.length) {
             let result = questionSet[currentQuestion];
             currentQuestion += 1;
             return result;

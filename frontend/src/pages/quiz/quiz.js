@@ -40,6 +40,20 @@ async function displayQuestion(questionData) {
     }
 }
 
+const quizManager = createQuiz(championName);
+
+document.querySelector("button#start").addEventListener("click", async () => {
+    await quizManager.createQuestionSet(5);
+    displayQuestion(quizManager.getNextQuestion());
+})
+
+document.querySelector("button#next").addEventListener("click", () => {
+    let question = quizManager.getNextQuestion();
+    if (question) {
+        displayQuestion(question);
+    };
+});
+
 const body = document.querySelector("body");
 const icon = document.createElement("img");
 const data = await getChampionIcon(championName);
@@ -66,15 +80,6 @@ video.classList.add("gif");
 body.appendChild(video);
 
 
-//const randQuestion = await getRandomQuestion(championName);
-//await displayQuestion(randQuestion);
-
-const quizManager = createQuiz(championName);
-await quizManager.createQuestionSet(3);
-let question;
-while ((question = quizManager.getNextQuestion()) != undefined) {
-    displayQuestion(question);
-}
 
 
 
