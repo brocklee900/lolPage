@@ -1,7 +1,8 @@
 import "./quiz.css";
-import { testSupabase, getQuestions, getRandomQuestion, getRandomQuestionSet } from "../../scripts/supabase";
 import { getChampionIcon, getAnswerData } from "../../scripts/lolStatic";
 import { createPlaceholder } from "../../scripts/error";
+import { createQuiz } from "../../scripts/quizManager";
+import { testSupabase } from "../../scripts/supabase";
 
 //When accessing quiz page, a champion must be included in the url params
 //This will determine which questions to retrieve, 
@@ -68,10 +69,13 @@ body.appendChild(video);
 //const randQuestion = await getRandomQuestion(championName);
 //await displayQuestion(randQuestion);
 
-const randQuestionSet = await getRandomQuestionSet(championName, 4);
-for (const q of randQuestionSet) {
-    await displayQuestion(q);
+const quizManager = createQuiz(championName);
+await quizManager.createQuestionSet(3);
+let question;
+while ((question = quizManager.getNextQuestion()) != undefined) {
+    displayQuestion(question);
 }
+
 
 
 
