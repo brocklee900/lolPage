@@ -3,7 +3,20 @@ h1 {
     color: green;
 }
 
+.answerBox.true {
+    border: 5px solid green;
+}
+
+.answerBox.false {
+    border: 5px solid red;
+}
+
 .answerBox {
-    border: 1px solid black;
+    border: 5px solid black;
     border-radius: 2px
+}
+
+#answerDisplay {
+    border: 1px solid blue;
+    padding: 20px;
 }

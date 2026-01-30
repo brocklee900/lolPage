@@ -9,13 +9,17 @@ import { testSupabase } from "../../scripts/supabase";
 //as they should pertain to the champion specified
 const params = new URLSearchParams(window.location.search);
 const championName = (params.get("champion")); 
+const quizManager = createQuiz(championName);
 
-const createAnswerBox = (answer_text) => {
+const createAnswerBox = (answerText, isCorrect) => {
     const answerDisplay = document.querySelector('#answerDisplay');
     let div = document.createElement('div');
     div.classList.add("answerBox");
+    if (isCorrect) {
+        div.classList.add("correctAnswer");
+    };
     let text = document.createElement('p');
-    text.textContent = answer_text;
+    text.textContent = answerText;
     div.appendChild(text);
     answerDisplay.appendChild(div);
 }
@@ -29,7 +33,7 @@ async function displayQuestion(questionData) {
         console.log('Pull data from supabase');
         qText.textContent = questionData.question_text;
         for (const answer of questionData.answers) {
-            createAnswerBox(answer.answer_text);
+            createAnswerBox(answer.answer_text, answer.is_correct);
         }
     } else {
         qText.textContent = questionData.question_text.replace("{championName}", championName);
@@ -40,18 +44,37 @@ async function displayQuestion(questionData) {
     }
 }
 
-const quizManager = createQuiz(championName);
+function checkMultipleChoiceCorrect(guess) {
+    let answers = [...(document.querySelector("#answerDisplay").children)];
+    for (let a of answers) {
+        if (a.classList.contains("correctAnswer")) {
+            a.classList.add("true");
 
-document.querySelector("button#start").addEventListener("click", async () => {
+            if (a == guess) {
+                quizManager.addScore();
+            }
+        } else {
+            a.classList.add("false");
+        }
+    }
+}
+
+document.querySelector("button#start").addEventListener("click", async (e) => {
     await quizManager.createQuestionSet(5);
     displayQuestion(quizManager.getNextQuestion());
-})
+});
 
-document.querySelector("button#next").addEventListener("click", () => {
+document.querySelector("button#next").addEventListener("click", (e) => {
     let question = quizManager.getNextQuestion();
     if (question) {
         displayQuestion(question);
     };
+});
+
+document.querySelector("div#answerDisplay").addEventListener("click", (e) => {
+    let guess = e.target.closest(".answerBox");
+    checkMultipleChoiceCorrect(guess);
+    console.log(`Score = ${quizManager.score}`);
 });
 
 const body = document.querySelector("body");
