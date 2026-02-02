@@ -28,10 +28,15 @@ function createQuiz(name) {
         console.log("Answered Correctly. +1 Score");
     }
 
+    function checkQuizEnd() {
+        return (currentQuestion >= questionSet.length);
+    }
+
     return {
         createQuestionSet, 
         getNextQuestion, 
         addScore,
+        checkQuizEnd,
         get score() {
             return score;
         },

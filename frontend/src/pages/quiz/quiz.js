@@ -58,23 +58,38 @@ function checkMultipleChoiceCorrect(guess) {
         }
     }
 }
-
+const NUM_QUESTIONS = 5;
 document.querySelector("button#start").addEventListener("click", async (e) => {
-    await quizManager.createQuestionSet(5);
+    await quizManager.createQuestionSet(NUM_QUESTIONS);
     displayQuestion(quizManager.getNextQuestion());
+    document.querySelector("button#start").classList.add("disabled");
+    document.querySelector("div#answerDisplay").classList.remove("disabled");
 });
 
 document.querySelector("button#next").addEventListener("click", (e) => {
     let question = quizManager.getNextQuestion();
     if (question) {
         displayQuestion(question);
+        document.querySelector("button#next").classList.add("disabled");
+        document.querySelector("div#answerDisplay").classList.remove("disabled")
+    } else {
+        let score = document.createElement("p");
+        score.textContent = `Score: ${quizManager.score}/${NUM_QUESTIONS}`;
+        document.querySelector('#answerDisplay').replaceChildren(score);
+        document.querySelector('#questionDisplay').replaceChildren();
+        document.querySelector("button#next").classList.add("disabled");
+        document.querySelector("button#start").classList.remove("disabled")
     };
 });
 
 document.querySelector("div#answerDisplay").addEventListener("click", (e) => {
     let guess = e.target.closest(".answerBox");
-    checkMultipleChoiceCorrect(guess);
-    console.log(`Score = ${quizManager.score}`);
+    if (guess) { //Check to make sure one of answer boxes was clicked and not empty space
+        checkMultipleChoiceCorrect(guess);
+        console.log(`Score = ${quizManager.score}`);
+        document.querySelector("button#next").classList.remove("disabled");
+        document.querySelector("div#answerDisplay").classList.add("disabled");
+    }
 });
 
 const body = document.querySelector("body");

@@ -20,3 +20,12 @@ h1 {
     border: 1px solid blue;
     padding: 20px;
 }
+
+#answerDisplay.disabled {
+    opacity: 1;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
