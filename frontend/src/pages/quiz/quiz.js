@@ -10,14 +10,12 @@ import { testSupabase } from "../../scripts/supabase";
 const params = new URLSearchParams(window.location.search);
 const championName = (params.get("champion")); 
 const quizManager = createQuiz(championName);
+disableDisplays();
 
-const createAnswerBox = (answerText, isCorrect) => {
+const createAnswerBox = (answerText) => {
     const answerDisplay = document.querySelector('#answerDisplay');
     let div = document.createElement('div');
     div.classList.add("answerBox");
-    if (isCorrect) {
-        div.classList.add("correctAnswer");
-    };
     let text = document.createElement('p');
     text.textContent = answerText;
     div.appendChild(text);
@@ -33,7 +31,7 @@ async function displayQuestion(questionData) {
         console.log('Pull data from supabase');
         qText.textContent = questionData.question_text;
         for (const answer of questionData.answers) {
-            createAnswerBox(answer.answer_text, answer.is_correct);
+            createAnswerBox(answer.answer_text);
         }
     } else {
         qText.textContent = questionData.question_text.replace("{championName}", championName);
@@ -45,40 +43,61 @@ async function displayQuestion(questionData) {
 }
 
 function checkMultipleChoiceCorrect(guess) {
-    let answers = [...(document.querySelector("#answerDisplay").children)];
-    for (let a of answers) {
-        if (a.classList.contains("correctAnswer")) {
-            a.classList.add("true");
+    const answer_text = guess.querySelector("p").textContent
+    const result = quizManager.checkMultipleChoiceCorrect(answer_text);
+    if (result) {
+        guess.classList.add("true");
+    } else {
+        guess.classList.add("false");
+    }
 
-            if (a == guess) {
-                quizManager.addScore();
-            }
-        } else {
-            a.classList.add("false");
-        }
+}
+
+function disableDisplays() {
+    const quizState = quizManager.quizState;
+
+    const startBtn = document.querySelector("button#start");
+    const nextBtn = document.querySelector("button#next");
+    const answerDisplay = document.querySelector("div#answerDisplay");
+    switch (quizState) {
+        case ("INACTIVE"):
+            console.log("INACTIVE STATE");
+            startBtn.classList.remove("disabled");
+            nextBtn.classList.add("disabled");
+            answerDisplay.classList.add("disabled");
+            break;
+        case ("GUESSING"):
+            console.log("GUESSING STATE");
+            startBtn.classList.add("disabled");
+            nextBtn.classList.add("disabled");
+            answerDisplay.classList.remove("disabled");
+            break;
+        case ("WAIT_NEXT"):
+            console.log("WAIT_NEXXT STATE");
+            startBtn.classList.add("disabled");
+            nextBtn.classList.remove("disabled");
+            answerDisplay.classList.add("disabled");
+            break;
     }
 }
+
 const NUM_QUESTIONS = 5;
 document.querySelector("button#start").addEventListener("click", async (e) => {
     await quizManager.createQuestionSet(NUM_QUESTIONS);
     displayQuestion(quizManager.getNextQuestion());
-    document.querySelector("button#start").classList.add("disabled");
-    document.querySelector("div#answerDisplay").classList.remove("disabled");
+    disableDisplays();
 });
 
 document.querySelector("button#next").addEventListener("click", (e) => {
     let question = quizManager.getNextQuestion();
     if (question) {
         displayQuestion(question);
-        document.querySelector("button#next").classList.add("disabled");
-        document.querySelector("div#answerDisplay").classList.remove("disabled")
+        disableDisplays();
     } else {
         let score = document.createElement("p");
         score.textContent = `Score: ${quizManager.score}/${NUM_QUESTIONS}`;
-        document.querySelector('#answerDisplay').replaceChildren(score);
-        document.querySelector('#questionDisplay').replaceChildren();
-        document.querySelector("button#next").classList.add("disabled");
-        document.querySelector("button#start").classList.remove("disabled")
+        document.querySelector("div#answerDisplay").replaceChildren(score);
+        disableDisplays();
     };
 });
 
@@ -87,8 +106,7 @@ document.querySelector("div#answerDisplay").addEventListener("click", (e) => {
     if (guess) { //Check to make sure one of answer boxes was clicked and not empty space
         checkMultipleChoiceCorrect(guess);
         console.log(`Score = ${quizManager.score}`);
-        document.querySelector("button#next").classList.remove("disabled");
-        document.querySelector("div#answerDisplay").classList.add("disabled");
+        disableDisplays();
     }
 });
 
