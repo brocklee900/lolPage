@@ -44,11 +44,14 @@ async function displayQuestion(questionData) {
 
 function checkMultipleChoiceCorrect(guess) {
     const answer_text = guess.querySelector("p").textContent
-    const result = quizManager.checkMultipleChoiceCorrect(answer_text);
+    const [result, correct] = quizManager.checkMultipleChoiceCorrect(answer_text);
     if (result) {
         guess.classList.add("true");
     } else {
         guess.classList.add("false");
+        let answers = [...document.querySelector("div#answerDisplay").children];
+        let correctDiv = answers.find(a => a.querySelector("p").textContent == correct);
+        correctDiv.classList.add("true");
     }
 
 }
@@ -61,19 +64,16 @@ function disableDisplays() {
     const answerDisplay = document.querySelector("div#answerDisplay");
     switch (quizState) {
         case ("INACTIVE"):
-            console.log("INACTIVE STATE");
             startBtn.classList.remove("disabled");
             nextBtn.classList.add("disabled");
             answerDisplay.classList.add("disabled");
             break;
         case ("GUESSING"):
-            console.log("GUESSING STATE");
             startBtn.classList.add("disabled");
             nextBtn.classList.add("disabled");
             answerDisplay.classList.remove("disabled");
             break;
         case ("WAIT_NEXT"):
-            console.log("WAIT_NEXXT STATE");
             startBtn.classList.add("disabled");
             nextBtn.classList.remove("disabled");
             answerDisplay.classList.add("disabled");
@@ -105,7 +105,6 @@ document.querySelector("div#answerDisplay").addEventListener("click", (e) => {
     let guess = e.target.closest(".answerBox");
     if (guess) { //Check to make sure one of answer boxes was clicked and not empty space
         checkMultipleChoiceCorrect(guess);
-        console.log(`Score = ${quizManager.score}`);
         disableDisplays();
     }
 });

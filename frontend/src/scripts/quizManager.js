@@ -36,13 +36,13 @@ function createQuiz(name) {
 
     function checkMultipleChoiceCorrect(guess) {
         quizState = State.WAIT_NEXT;
-        for (const answer of questionSet[currentQuestion-1].answers) {
-            if (guess == answer.answer_text && answer.is_correct) {
-                addScore();
-                return true;
-            }
+        const correct = (questionSet[currentQuestion-1].answers.find(a => a.is_correct)).answer_text;
+        if (guess == correct) {
+            return [true, correct]
+        } else {
+            return [false, correct]
         }
-        return false;
+
     }
 
     function addScore() {
