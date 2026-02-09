@@ -22,7 +22,7 @@ async function timeoutTest() {
     return new Promise(resolve => setTimeout(resolve, 10000));
 }
 
-async function preloadChampions() {
+/*async function preloadChampions() {
     //await timeoutTest();
     const response = await fetch(`${baseUrl}.json`);
     const data = await response.json();
@@ -34,6 +34,32 @@ async function preloadChampions() {
     Object.keys(data).forEach(key => {
         cache.set(key, data[key]);
     });
+}*/
+async function preloadChampions() {
+    let response;
+    //retrieve latest patch
+    response = await fetch(`https://ddragon.leagueoflegends.com/api/versions.json`);
+    const currentPatch = (await response.json())[0];
+
+    if (!response.ok) {
+        throw new Error("Server response error");
+    }
+
+    //retrieve collection of champions
+    response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${currentPatch}/data/en_US/champion.json`);
+    const championData = await response.json();
+
+
+    for (let champion of Object.keys(championData.data)) {
+        const data = championData.data[champion];
+        cache.set(data.id, {
+            title: data.title,
+            blurb: data.blurb,
+        });
+    }
+    
+    console.log(cache.get("Zaahen"));
+
 }
 
 async function getChampionData(championName) {
