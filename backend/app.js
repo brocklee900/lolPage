@@ -26,24 +26,23 @@ app.get(/.*/, (req, res) => { //needs a regex for the catchall. Doesn't like "*"
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
-//put into async funcion to avoid top level await error with require
-async function func() {
+//Before starting server, cache champion data collection
+const PORT = 3000;
+async function startServer() {
     try {
         await preloadChampions();
+
+        app.listen(PORT, (error) => {
+            if (error) {
+                throw error;
+            };
+
+            console.log(`App listening on port ${PORT}`);
+        });
     } catch (error) {
         console.log(error);
     }
 }
-func();
-//preloadChampions(); //start loading lolstatic champion cache before server starts
+startServer();
 
 
-
-const PORT = 3000;
-app.listen(PORT, (error) => {
-    if (error) {
-        throw error;
-    };
-
-    console.log(`App listening on port ${PORT}`);
-});
