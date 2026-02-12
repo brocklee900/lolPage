@@ -19,26 +19,26 @@ async function fetchData(url) {
 
 async function getSplashUrl(championName, num) {
 
-    return await fetchData(`/lolStatic/splash/${championName}/${num}`);
+    return await fetchData(`/riotDragon/splash/${championName}/${num}`);
 }
 
 async function getRandomSplashUrl(championName) {
-    return await fetchData(`/lolStatic/splash/random/${championName}`);
+    return await fetchData(`/riotDragon/splash/random/${championName}`);
 }
 
 async function getAllLoadingSplash() {
 
-    return await fetchData(`/lolStatic/loadScreenSplash/all`);
+    return await fetchData(`/riotDragon/loadScreenSplash/all`);
 }
 
 async function getLoadingSplashUrl(championName, num) {
     
-    return await fetchData(`/lolStatic/loadScreenSplash/${championName}/${num}`);
+    return await fetchData(`/riotDragon/loadScreenSplash/${championName}/${num}`);
 }
 
 async function getChampionIcon(championName) {
 
-    return await fetchData(`/lolStatic/icon/${championName}`);
+    return await fetchData(`/riotDragon/icon/${championName}`);
 }
 
 async function getAnswerData(url) {

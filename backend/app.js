@@ -2,14 +2,14 @@
 require('dotenv').config();
 const express = require("express");
 const path = require("path");
-const lolStaticRouter = require("./routes/lolStaticRouter");
+const riotDragonRouter = require("./routes/riotDragonRouter");
 const supabaseRouter = require("./routes/supabaseRouter");
-const { preloadChampions } = require("./controllers/lolStaticController");
+const { preloadChampions } = require("./controllers/riotDragonController");
 
 
 const app = express();
 
-app.use("/lolStatic", lolStaticRouter);
+app.use("/riotDragon", riotDragonRouter);
 app.use("/supabase", supabaseRouter);
 
 //page routing

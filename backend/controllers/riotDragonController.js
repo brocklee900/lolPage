@@ -3,7 +3,6 @@ const fetch = require("node-fetch");
 const NodeCache = require("node-cache");
 const cache = new NodeCache();
 
-const baseUrl = "http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions"
 
 function randInt(range) {
     let min = 0;

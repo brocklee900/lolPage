@@ -1,5 +1,5 @@
 import "./champions.css";
-import { getAllLoadingSplash } from "../../scripts/lolStatic";
+import { getAllLoadingSplash } from "../../scripts/riotDragon";
 import { getPlaceholder } from "../../scripts/error";
 
 const body = document.querySelector("body");

@@ -1,6 +1,6 @@
 
 import "./index.css";
-import { getSplashUrl, getRandomSplashUrl } from "../../scripts/lolStatic";
+import { getSplashUrl, getRandomSplashUrl } from "../../scripts/riotDragon";
 import { createPlaceholder } from "../../scripts/error";
 
 const img = document.querySelector(".splash");

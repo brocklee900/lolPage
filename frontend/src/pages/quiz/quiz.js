@@ -1,5 +1,5 @@
 import "./quiz.css";
-import { getChampionIcon, getAnswerData } from "../../scripts/lolStatic";
+import { getChampionIcon, getAnswerData } from "../../scripts/riotDragon";
 import { createPlaceholder } from "../../scripts/error";
 import { createQuiz } from "../../scripts/quizManager";
 import { testSupabase } from "../../scripts/supabase";
