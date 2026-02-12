@@ -3,6 +3,16 @@ h1 {
     color: green;
 }
 
+div#core {
+    display: flex;
+}
+
+div#quizDisplay {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+}
+
 .answerBox.true {
     border: 5px solid green;
 }
@@ -28,4 +38,11 @@ h1 {
 .disabled {
     pointer-events: none;
     opacity: 0.5;
+}
+
+button#start,
+button#next {
+    height: 30px;
+    width: 50px;
+    align-self: center;
 }

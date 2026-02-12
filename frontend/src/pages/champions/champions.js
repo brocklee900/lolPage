@@ -1,20 +1,20 @@
 import "./champions.css";
-import { getAllLoadingSplash } from "../../scripts/riotDragon";
+import { getAllChampionIcon } from "../../scripts/riotDragon";
 import { getPlaceholder } from "../../scripts/error";
 
 const body = document.querySelector("body");
 
-const splashArts = await getAllLoadingSplash();
-if (splashArts) {
+const icons = await getAllChampionIcon();
+if (icons) {
 
     const url = "/quiz?champion=";
-    Object.keys(splashArts).forEach((key) => {
+    Object.keys(icons).forEach((key) => {
         let a = document.createElement("a");
         a.href = `${url}${key}`;
         body.appendChild(a);
 
         let img = document.createElement("img");
-        img.src = splashArts[key];
+        img.src = icons[key];
         a.append(img);
 
     });

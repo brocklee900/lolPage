@@ -99,20 +99,19 @@ async function getChampionData(championName) {
     }
 }
 
-async function getSplashUrl(req, res) {
+async function getSplash(req, res) {
 
     const { championName, num } = req.params;
     try {
         const data = await getChampionData(championName);
-        const splash = data.skins[num].splashPath;
+        const splash = data.skins[num].splash;
         res.json({data: splash});
     } catch (error) {
         sendError(res, "Failed to get splash");
     }
-
 }
 
-async function getRandomSplashUrl(req, res) {
+async function getRandomSplash(req, res) {
     const { championName } = req.params;
 
     try {
@@ -125,9 +124,8 @@ async function getRandomSplashUrl(req, res) {
     }
 }
 
-async function getAllLoadingSplash(req, res) {
+async function getAllLoading(req, res) {
     if (cache.keys().length != 0) {
-
         const data = {};
         cache.keys().forEach(key => {
             data[key] = cache.get(key).skins[0].loading;
@@ -139,15 +137,38 @@ async function getAllLoadingSplash(req, res) {
     }
 }
 
-async function getLoadingSplashUrl(req, res) {
+async function getLoading(req, res) {
     const { championName, num } = req.params;
-
     try {
         const data = await getChampionData(championName);
-        const loadingSplash = data.skins[num].loading;
-        res.json({data: loadingSplash});
+        const loading = data.skins[num].loading;
+        res.json({data: loading});
     } catch (error) {
-        sendError(res, "Failed to get splash");
+        sendError(res, "Failed to get loading");
+    }
+}
+
+async function getRandomLoading(req, res) {
+    const { championName } = req.params;
+    try {
+        const data = await getChampionData(championName);
+        let num = randInt(Object.keys(data.skins).length);
+        const loading = data.skins[num].loading;
+        res.json({data: loading});
+    } catch (error) {
+        sendError(res, "Failed to get random loading");
+    }
+}
+
+async function getAllChampionIcon(req, res) {
+    if (cache.keys().length != 0) {
+        const data = {};
+        cache.keys().forEach(key => {
+            data[key] = cache.get(key).icon;
+        });
+        res.json(data);
+    } else {
+        throw new Error("Failed to get all icon");
     }
 }
 
@@ -176,10 +197,12 @@ async function getChampionAbility(req, res) {
 
 module.exports = {
     preloadChampions,
-    getSplashUrl,
-    getRandomSplashUrl,
-    getAllLoadingSplash,
-    getLoadingSplashUrl,
+    getSplash,
+    getRandomSplash,
+    getAllLoading,
+    getLoading,
+    getRandomLoading,
     getChampionIcon,
+    getAllChampionIcon,
     getChampionAbility,
 };

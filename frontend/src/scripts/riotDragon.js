@@ -17,28 +17,36 @@ async function fetchData(url) {
     }
 }
 
-async function getSplashUrl(championName, num) {
+async function getSplash(championName, num) {
 
     return await fetchData(`/riotDragon/splash/${championName}/${num}`);
 }
 
-async function getRandomSplashUrl(championName) {
+async function getRandomSplash(championName) {
     return await fetchData(`/riotDragon/splash/random/${championName}`);
 }
 
-async function getAllLoadingSplash() {
+async function getAllLoading() {
 
-    return await fetchData(`/riotDragon/loadScreenSplash/all`);
+    return await fetchData(`/riotDragon/loading/all`);
 }
 
-async function getLoadingSplashUrl(championName, num) {
+async function getLoading(championName, num) {
     
-    return await fetchData(`/riotDragon/loadScreenSplash/${championName}/${num}`);
+    return await fetchData(`/riotDragon/loading/${championName}/${num}`);
+}
+
+async function getRandomLoading(championName) {
+    return await fetchData(`/riotDragon/loading/random/${championName}`);
 }
 
 async function getChampionIcon(championName) {
 
     return await fetchData(`/riotDragon/icon/${championName}`);
+}
+
+async function getAllChampionIcon() {
+    return await fetchData(`/riotDragon/icon/all`);
 }
 
 async function getAnswerData(url) {
@@ -47,10 +55,12 @@ async function getAnswerData(url) {
 
 
 export {
-    getSplashUrl,
-    getRandomSplashUrl,
-    getAllLoadingSplash,
-    getLoadingSplashUrl,
+    getSplash,
+    getRandomSplash,
+    getAllLoading,
+    getLoading,
+    getRandomLoading,
     getChampionIcon,
+    getAllChampionIcon,
     getAnswerData,
 };

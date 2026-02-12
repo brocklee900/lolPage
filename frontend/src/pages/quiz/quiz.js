@@ -1,5 +1,5 @@
 import "./quiz.css";
-import { getChampionIcon, getAnswerData } from "../../scripts/riotDragon";
+import { getChampionIcon, getLoading, getRandomLoading, getAnswerData } from "../../scripts/riotDragon";
 import { createPlaceholder } from "../../scripts/error";
 import { createQuiz } from "../../scripts/quizManager";
 import { testSupabase } from "../../scripts/supabase";
@@ -111,7 +111,7 @@ document.querySelector("div#answerDisplay").addEventListener("click", (e) => {
 
 const body = document.querySelector("body");
 const icon = document.createElement("img");
-const data = await getChampionIcon(championName);
+let data = await getChampionIcon(championName);
 if (data) {
     icon.src = data.data; //data exists
 } else {
@@ -119,6 +119,16 @@ if (data) {
 }
 icon.onerror = createPlaceholder;
 body.appendChild(icon);
+
+const defaultSkin = document.querySelector("img#defaultSkin");
+data = await getLoading(championName, 0);
+defaultSkin.src = data.data;
+const randomSkin = document.querySelector("img#randomSkin");
+data = await getRandomLoading(championName);
+while (data.data == defaultSkin.src) {
+    data = await getRandomLoading(championName);
+}
+randomSkin.src = data.data;
 
 const p = document.createElement("p");
 p.textContent = championName;

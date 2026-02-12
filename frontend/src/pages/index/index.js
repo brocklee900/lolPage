@@ -1,10 +1,10 @@
 
 import "./index.css";
-import { getSplashUrl, getRandomSplashUrl } from "../../scripts/riotDragon";
+import { getSplash, getRandomSplash } from "../../scripts/riotDragon";
 import { createPlaceholder } from "../../scripts/error";
 
 const img = document.querySelector(".splash");
-const data = await getRandomSplashUrl("Zoe");
+const data = await getRandomSplash("Zoe");
 if (data) {
     img.src = data.data;
 } else {
