@@ -12,7 +12,7 @@ const championName = (params.get("champion"));
 const quizManager = createQuiz(championName);
 disableDisplays();
 
-const createAnswerBox = (answerText) => {
+function createAnswerBox(answerText) {
     const answerDisplay = document.querySelector('#answerDisplay');
     let div = document.createElement('div');
     div.classList.add("answerBox");
@@ -24,21 +24,18 @@ const createAnswerBox = (answerText) => {
 
 async function displayQuestion(questionData) {
     const qText = document.querySelector('#questionDisplay p');
-    document.querySelector('#answerDisplay').replaceChildren();
+    const inputBox = document.querySelector('input#inputBox');
+    document.querySelector('#answerDisplay').replaceChildren(inputBox);
 
-    console.log(questionData);
-    if (questionData.answer_source == 'database') {
-        console.log('Pull data from supabase');
-        qText.textContent = questionData.question_text;
+    qText.textContent = questionData.question_text.replace("{championName}", championName);
+    if (questionData.question_type == 'multiple') {
+        console.log("MULTIPLE CHOICE QUESTION");
+        console.log("PULL ANSWER FROM SUPABASE");
         for (const answer of questionData.answers) {
             createAnswerBox(answer.answer_text);
         }
-    } else {
-        qText.textContent = questionData.question_text.replace("{championName}", championName);
-        console.log('Pull data from lolstatic');
-        let answer_endpoint = questionData.answer_endpoint.replace("{championName}", championName);
-        let answer = await getAnswerData(answer_endpoint);
-        createAnswerBox(answer.data);
+    } else { //question_type == 'fill'
+        console.log("FILL IN BLANK QUESTION");
     }
 }
 
@@ -49,11 +46,16 @@ function checkMultipleChoiceCorrect(guess) {
         guess.classList.add("true");
     } else {
         guess.classList.add("false");
-        let answers = [...document.querySelector("div#answerDisplay").children];
+        let answers = [...document.querySelector("div#answerDisplay")
+            .querySelectorAll(":scope > div")]; //exclude inputbox
         let correctDiv = answers.find(a => a.querySelector("p").textContent == correct);
         correctDiv.classList.add("true");
     }
+}
 
+async function checkFillBlankCorrect() {
+    const value = document.querySelector("input#inputBox").value;
+    await quizManager.checkFillBlankCorrect(value);
 }
 
 function disableDisplays() {
@@ -61,22 +63,38 @@ function disableDisplays() {
 
     const startBtn = document.querySelector("button#start");
     const nextBtn = document.querySelector("button#next");
+    const submitBtn = document.querySelector("button#submit");
     const answerDisplay = document.querySelector("div#answerDisplay");
+    const inputBox = document.querySelector("#inputBox");
     switch (quizState) {
         case ("INACTIVE"):
             startBtn.classList.remove("disabled");
             nextBtn.classList.add("disabled");
+            submitBtn.classList.add("disabled");
             answerDisplay.classList.add("disabled");
+            inputBox.classList.add("disabled");
             break;
-        case ("GUESSING"):
+        case ("MULTIPLEQUESTION"):
             startBtn.classList.add("disabled");
             nextBtn.classList.add("disabled");
+            submitBtn.classList.add("disabled");
             answerDisplay.classList.remove("disabled");
+            inputBox.classList.add("disabled");
+            break;
+        case ("FILLQUESTION"):
+            startBtn.classList.add("disabled");
+            nextBtn.classList.add("disabled");
+            submitBtn.classList.remove("disabled");
+            answerDisplay.classList.remove("disabled");
+            inputBox.classList.remove("disabled", "inactive");
+            inputBox.value = "";
             break;
         case ("WAIT_NEXT"):
             startBtn.classList.add("disabled");
             nextBtn.classList.remove("disabled");
+            submitBtn.classList.add("disabled");
             answerDisplay.classList.add("disabled");
+            inputBox.classList.add("inactive");
             break;
     }
 }
@@ -88,6 +106,19 @@ document.querySelector("button#start").addEventListener("click", async (e) => {
     disableDisplays();
 });
 
+document.querySelector("button#submit").addEventListener("click", async (e) => {
+    await checkFillBlankCorrect();
+    disableDisplays();
+});
+
+document.querySelector("input#inputBox").addEventListener("keydown", async (e) => {
+    if (quizManager.quizState == "FILLQUESTION" && e.key == "Enter") {
+        document.querySelector("input#inputBox").blur();
+        await checkFillBlankCorrect();
+        disableDisplays();
+    }
+});
+
 document.querySelector("button#next").addEventListener("click", (e) => {
     let question = quizManager.getNextQuestion();
     if (question) {
@@ -96,7 +127,8 @@ document.querySelector("button#next").addEventListener("click", (e) => {
     } else {
         let score = document.createElement("p");
         score.textContent = `Score: ${quizManager.score}/${NUM_QUESTIONS}`;
-        document.querySelector("div#answerDisplay").replaceChildren(score);
+        const input = document.querySelector("input#inputBox");
+        document.querySelector("div#answerDisplay").replaceChildren(score, input);
         disableDisplays();
     };
 });

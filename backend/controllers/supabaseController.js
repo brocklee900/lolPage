@@ -23,6 +23,7 @@ async function queryQuestions(championName) {
         .from('questions')
         .select(
             `question_text,
+            question_type,
             answer_source,
             answer_endpoint,
             champions!inner(
@@ -40,6 +41,7 @@ async function queryQuestions(championName) {
         .from('questions')
         .select(
             `question_text,
+            question_type,
             answer_source,
             answer_endpoint,
             champions(
