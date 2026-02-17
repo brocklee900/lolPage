@@ -2,9 +2,29 @@
 const fetch = require("node-fetch");
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+const secret = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET);
 
 const randInt = (length) => {
     return Math.floor(Math.random() * (length));
+}
+
+async function storeCache(cache, patch) {
+    const { data } = await secret
+        .from("data_cache")
+        .select("patch_number")
+        .eq("id", 1)
+        .single();
+    
+    if (data.patch_number < patch) {
+        console.log('update');
+        await secret
+            .from("data_cache")
+            .upsert({
+                id: 1,
+                data: cache.mget(cache.keys()),
+                patch_number: patch
+            });
+    }
 }
 
 async function getChampionEmote(req, res) {
@@ -91,6 +111,7 @@ async function getRandomQuestionSet(req, res) {
 }
 
 module.exports = {
+    storeCache,
     getChampionEmote,
     getQuestions,
     getRandomQuestion,

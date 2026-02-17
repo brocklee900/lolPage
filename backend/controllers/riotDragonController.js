@@ -2,6 +2,7 @@
 const fetch = require("node-fetch");
 const NodeCache = require("node-cache");
 const cache = new NodeCache();
+const {storeCache} = require("./supabaseController");
 
 
 function randInt(range) {
@@ -88,6 +89,8 @@ async function preloadChampions() {
             abilities: getAbilities(detailedData, currentPatch),
         });
     };
+
+    storeCache(cache, currentPatch);
 }
 
 async function getChampionData(championName) {
