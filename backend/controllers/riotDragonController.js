@@ -2,7 +2,7 @@
 const fetch = require("node-fetch");
 const NodeCache = require("node-cache");
 const cache = new NodeCache();
-const {storeCache} = require("./supabaseController");
+const {storeCache, retrieveCache} = require("./supabaseController");
 
 
 function randInt(range) {
@@ -71,26 +71,38 @@ async function getChampionDataDragon(championID, patch) {
 async function preloadChampions() {
     const currentPatch = await getLatestPatch();
     //retrieve collection of champions
-    const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${currentPatch}/data/en_US/champion.json`);
-    if (!response.ok) {
-        throw new Error("Server response error");
+    try {
+        const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${currentPatch}/data/en_US/champion.json`);
+        if (!response.ok) {
+            throw new Error("Failed to fetch");
+        }
+        const championCollection = await response.json();
+
+        for (let champion of Object.keys(championCollection.data)) {
+            const generalData = championCollection.data[champion];
+            const detailedData = await getChampionDataDragon(generalData.id, currentPatch);
+
+            cache.set(generalData.id, {
+                title: generalData.title,
+                blurb: generalData.blurb,
+                icon: `https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/champion/${generalData.id}.png`,
+                skins: getSkins(detailedData),
+                abilities: getAbilities(detailedData, currentPatch),
+            });
+        };
+        storeCache(cache, currentPatch);
+        console.log("Successfully preload from Riot Dragon");
+        return;
+    } catch (error) {
+        console.log(`ERROR: ${error}`);
+        console.log("Failed preoad from Riot Dragon");
     }
-    const championCollection = await response.json();
-
-    for (let champion of Object.keys(championCollection.data)) {
-        const generalData = championCollection.data[champion];
-        const detailedData = await getChampionDataDragon(generalData.id, currentPatch);
-
-        cache.set(generalData.id, {
-            title: generalData.title,
-            blurb: generalData.blurb,
-            icon: `https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/champion/${generalData.id}.png`,
-            skins: getSkins(detailedData),
-            abilities: getAbilities(detailedData, currentPatch),
-        });
-    };
-
-    storeCache(cache, currentPatch);
+    console.log("Start preload from supabase");
+    const data = await retrieveCache();
+    cache.mset(Object.entries(data).map(([key, value]) => ({
+        key,
+        val: value
+    })));
 }
 
 async function getChampionData(championName) {
@@ -166,7 +178,8 @@ async function getRandomLoading(req, res) {
 async function getAllChampionIcon(req, res) {
     if (cache.keys().length != 0) {
         const data = {};
-        cache.keys().forEach(key => {
+        const sortedKeys = cache.keys().sort((a, b) => a.localeCompare(b)); //Sort before listing 1 by 1
+        sortedKeys.forEach(key => {
             data[key] = cache.get(key).icon;
         });
         res.json(data);
