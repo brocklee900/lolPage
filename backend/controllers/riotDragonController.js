@@ -107,7 +107,6 @@ async function preloadChampions() {
 
 async function getChampionData(championName) {
     if (cache.keys().length != 0) {
-        console.log("data retrieved from cache");
         return cache.get(championName);
     } else {
         throw new Error("Failed to retrieve data");

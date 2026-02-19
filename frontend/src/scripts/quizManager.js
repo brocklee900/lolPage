@@ -64,9 +64,9 @@ function createQuiz(name) {
         } else { //question.answer_source == "database"
             answer = question.answers[0].answer_text;
         }
-        answer = answer.replace(/\s+/g, "").toLowerCase();
+        const strippedAnswer = answer.replace(/\s+/g, "").toLowerCase();
 
-        if (guess == answer) {
+        if (guess == strippedAnswer) {
             addScore();
             return [true, answer];
         } else {

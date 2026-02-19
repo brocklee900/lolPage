@@ -41,21 +41,31 @@ async function displayQuestion(questionData) {
 
 function checkMultipleChoiceCorrect(guess) {
     const answer_text = guess.querySelector("p").textContent
-    const [result, correct] = quizManager.checkMultipleChoiceCorrect(answer_text);
+    const [result, correctAnswer] = quizManager.checkMultipleChoiceCorrect(answer_text);
     if (result) {
         guess.classList.add("true");
     } else {
         guess.classList.add("false");
         let answers = [...document.querySelector("div#answerDisplay")
             .querySelectorAll(":scope > div")]; //exclude inputbox
-        let correctDiv = answers.find(a => a.querySelector("p").textContent == correct);
+        let correctDiv = answers.find(a => a.querySelector("p").textContent == correctAnswer);
         correctDiv.classList.add("true");
     }
 }
 
 async function checkFillBlankCorrect() {
-    const value = document.querySelector("input#inputBox").value;
-    await quizManager.checkFillBlankCorrect(value);
+    const inputBox = document.querySelector("input#inputBox");
+    const [result, correctAnswer] = await quizManager.checkFillBlankCorrect(inputBox.value);
+    if (result) {
+        inputBox.classList.add("true");
+    } else {
+        inputBox.classList.add("false");
+        const answerDisplay = document.querySelector("div#answerDisplay");
+        const p = document.createElement("p");
+        p.textContent = `Answer: "${correctAnswer}"`;
+        answerDisplay.appendChild(p);
+    }
+
 }
 
 function disableDisplays() {
@@ -86,7 +96,7 @@ function disableDisplays() {
             nextBtn.classList.add("disabled");
             submitBtn.classList.remove("disabled");
             answerDisplay.classList.remove("disabled");
-            inputBox.classList.remove("disabled", "inactive");
+            inputBox.classList.remove("disabled", "inactive", "true", "false");
             inputBox.value = "";
             break;
         case ("WAIT_NEXT"):

@@ -13,11 +13,13 @@ div#quizDisplay {
     flex-direction: column;
 }
 
-.answerBox.true {
+.answerBox.true,
+#inputBox.inactive.true {
     border: 5px solid green;
 }
 
-.answerBox.false {
+.answerBox.false,
+#inputBox.inactive.false {
     border: 5px solid red;
 }
 
