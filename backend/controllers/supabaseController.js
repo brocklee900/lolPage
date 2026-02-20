@@ -70,6 +70,7 @@ async function queryQuestions(championName) {
             question_type,
             answer_source,
             answer_endpoint,
+            visual_data,
             champions!inner(
                 champion_name
             ),
@@ -88,6 +89,7 @@ async function queryQuestions(championName) {
             question_type,
             answer_source,
             answer_endpoint,
+            visual_data,
             champions(
                 champion_name
             ),

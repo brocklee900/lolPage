@@ -199,6 +199,17 @@ async function getChampionIcon(req, res) {
     }
 }
 
+async function getChampionAbilityImage(req, res) {
+    const { championName, key } = req.params;
+    try {
+        const data = await getChampionData(championName);
+        const image = data.abilities[key.toUpperCase()].icon;
+        res.json({data: image});
+    } catch (error) {
+        sendError(res, "Failed to get ability image");
+    }
+}
+
 async function getChampionAbility(req, res) {
     const { championName, key } = req.params;
     try {
@@ -219,5 +230,6 @@ module.exports = {
     getRandomLoading,
     getChampionIcon,
     getAllChampionIcon,
+    getChampionAbilityImage,
     getChampionAbility,
 };

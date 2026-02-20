@@ -1,5 +1,5 @@
 import "./quiz.css";
-import { getChampionIcon, getLoading, getRandomLoading, getAnswerData } from "../../scripts/riotDragon";
+import { getChampionIcon, getLoading, getRandomLoading, getQuestionData } from "../../scripts/riotDragon";
 import { createPlaceholder } from "../../scripts/error";
 import { createQuiz } from "../../scripts/quizManager";
 import { testSupabase } from "../../scripts/supabase";
@@ -22,12 +22,26 @@ function createAnswerBox(answerText) {
     answerDisplay.appendChild(div);
 }
 
+async function displayVisualData(visualData) {
+    if (visualData) {
+        const url = visualData.replace("{championName}", championName);
+        const questionDisplay = document.querySelector('#questionDisplay');
+        const data = await getQuestionData(url);
+        const img = document.createElement("img")
+        img.src = data.data;
+        questionDisplay.appendChild(img);
+    }
+    
+}
+
 async function displayQuestion(questionData) {
     const qText = document.querySelector('#questionDisplay p');
     const inputBox = document.querySelector('input#inputBox');
+    document.querySelector('#questionDisplay').replaceChildren(qText);
     document.querySelector('#answerDisplay').replaceChildren(inputBox);
 
     qText.textContent = questionData.question_text.replace("{championName}", championName);
+
     if (questionData.question_type == 'multiple') {
         console.log("MULTIPLE CHOICE QUESTION");
         console.log("PULL ANSWER FROM SUPABASE");
@@ -37,6 +51,8 @@ async function displayQuestion(questionData) {
     } else { //question_type == 'fill'
         console.log("FILL IN BLANK QUESTION");
     }
+
+    displayVisualData(questionData.visual_data)
 }
 
 function checkMultipleChoiceCorrect(guess) {

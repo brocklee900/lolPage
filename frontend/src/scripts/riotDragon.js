@@ -49,9 +49,10 @@ async function getAllChampionIcon() {
     return await fetchData(`/riotDragon/icon/all`);
 }
 
-async function getAnswerData(url) {
+async function getQuestionData(url) {
     return await fetchData(url);
 }
+
 
 
 export {
@@ -62,5 +63,5 @@ export {
     getRandomLoading,
     getChampionIcon,
     getAllChampionIcon,
-    getAnswerData,
+    getQuestionData,
 };

@@ -1,6 +1,6 @@
 
 import { getRandomQuestionSet } from "./supabase";
-import { getAnswerData } from "./riotDragon";
+import { getQuestionData } from "./riotDragon";
 
 
 function createQuiz(name) {
@@ -60,7 +60,7 @@ function createQuiz(name) {
         const question = questionSet[currentQuestion-1];
         if (question.answer_source == "api") {
             const url = question.answer_endpoint.replace("{championName}", championName);
-            answer = (await getAnswerData(url)).data;
+            answer = (await getQuestionData(url)).data;
         } else { //question.answer_source == "database"
             answer = question.answers[0].answer_text;
         }
