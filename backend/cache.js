@@ -130,9 +130,21 @@ async function preloadChampions() {
     })));
 }
 
-async function getChampionData(championName) {
+function getCacheKeysSorted() {
+    return cache.keys().sort((a, b) => a.localeCompare(b)); //Sort before listing 1 by 1
+}
+
+function getChampionData(championName) {
     if (cache.keys().length != 0) {
         return cache.get(championName);
+    } else {
+        throw new Error("Failed to retrieve champion data");
+    }
+}
+
+async function getChampionAbility(championName, key) {
+    if (cache.keys().length != 0) {
+        return cache.get(championName).abilities[key.toUpperCase()];
     } else {
         throw new Error("Failed to retrieve champion data");
     }
@@ -142,5 +154,7 @@ module.exports = {
     storeCache,
     retrieveCache,
     preloadChampions,
+    getCacheKeysSorted,
     getChampionData,
+    getChampionAbility,
 }

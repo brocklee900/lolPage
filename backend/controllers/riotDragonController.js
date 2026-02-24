@@ -1,4 +1,4 @@
-const { getChampionData } = require("../cache.js");
+const { getChampionData, getCacheKeysSorted } = require("../cache.js");
 
 function randInt(range) {
     let min = 0;
@@ -38,19 +38,6 @@ async function getRandomSplash(req, res) {
     }
 }
 
-async function getAllLoading(req, res) {
-    if (cache.keys().length != 0) {
-        const data = {};
-        cache.keys().forEach(key => {
-            data[key] = cache.get(key).skins[0].loading;
-        });
-
-        res.json(data);
-    } else {
-        throw new Error("Failed to get all splash");
-    }
-}
-
 async function getLoading(req, res) {
     const { championName, num } = req.params;
     try {
@@ -75,15 +62,15 @@ async function getRandomLoading(req, res) {
 }
 
 async function getAllChampionIcon(req, res) {
-    if (cache.keys().length != 0) {
+    try {
         const data = {};
-        const sortedKeys = cache.keys().sort((a, b) => a.localeCompare(b)); //Sort before listing 1 by 1
-        sortedKeys.forEach(key => {
-            data[key] = cache.get(key).icon;
-        });
+        const sortedKeys = getCacheKeysSorted();
+        for (let key of sortedKeys) {
+            data[key] = getChampionData(key).icon;
+        };
         res.json(data);
-    } else {
-        throw new Error("Failed to get all icon");
+    } catch (error) {
+        sendError(res, "Failed to get all icons");
     }
 }
 
@@ -91,7 +78,7 @@ async function getChampionIcon(req, res) {
     const { championName } = req.params;
 
     try {
-        const data = await getChampionData(championName);
+        const data = getChampionData(championName);
         const icon = data.icon;
         res.json({data: icon});
     } catch (error) {
@@ -102,7 +89,7 @@ async function getChampionIcon(req, res) {
 async function getChampionAbilityImage(req, res) {
     const { championName, key } = req.params;
     try {
-        const data = await getChampionData(championName);
+        const data = getChampionData(championName);
         const image = data.abilities[key.toUpperCase()].icon;
         res.json({data: image});
     } catch (error) {
@@ -113,7 +100,7 @@ async function getChampionAbilityImage(req, res) {
 async function getChampionAbilityName(req, res) {
     const { championName, key } = req.params;
     try {
-        const data = await getChampionData(championName);
+        const data = getChampionData(championName);
         const ability = data.abilities[key.toUpperCase()].name;
         res.json({data: ability});
     } catch (error) {
@@ -124,7 +111,6 @@ async function getChampionAbilityName(req, res) {
 module.exports = {
     getSplash,
     getRandomSplash,
-    getAllLoading,
     getLoading,
     getRandomLoading,
     getChampionIcon,

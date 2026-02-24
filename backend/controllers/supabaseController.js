@@ -1,6 +1,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+const { getChampionAbility } = require("../cache.js");
 
 const randInt = (length) => {
     return Math.floor(Math.random() * (length));
@@ -24,7 +25,6 @@ async function queryQuestions(championName) {
             `question_text,
             question_type,
             answer_source,
-            answer_endpoint,
             visual_data,
             config,
             champions!inner(
@@ -44,7 +44,6 @@ async function queryQuestions(championName) {
             `question_text,
             question_type,
             answer_source,
-            answer_endpoint,
             visual_data,
             config,
             champions(
@@ -59,6 +58,18 @@ async function queryQuestions(championName) {
         .is('champion_id', null);
     
     return [...dataNamed, ...dataGeneral];
+}
+
+async function retrieveQuestionData(question, championName) {
+    switch (question.answer_source) {
+        case "static":
+            break
+        case "ability":
+            const { ability_key } = question.config;
+            const ability = await getChampionAbility(championName, ability_key);
+            question.answers.push({id:0, is_correct: true, answer_text: ability.name});
+            question.visual_data = ability.icon;
+    }
 }
 
 function randomSet(data, n) {
@@ -91,6 +102,11 @@ async function getRandomQuestionSet(req, res) {
     const {championName, num} = req.params;
     const data = await queryQuestions(championName);
     let questionSet = randomSet(data, num);
+    for (let question of questionSet) {
+        console.log("BEFORE", question);
+        await retrieveQuestionData(question, championName);
+        console.log("AFTER", question);
+    }
     res.json(questionSet);
 }
 

@@ -56,14 +56,9 @@ function createQuiz(name) {
         quizState = State.WAIT_NEXT;
         guess = guess.replace(/\s+/g, "").toLowerCase();
         quizState = State.WAIT_NEXT;
-        let answer;
+        
         const question = questionSet[currentQuestion-1];
-        if (question.answer_source == "api") {
-            const url = question.answer_endpoint.replace("{championName}", championName);
-            answer = (await getQuestionData(url)).data;
-        } else { //question.answer_source == "database"
-            answer = question.answers[0].answer_text;
-        }
+        let answer = question.answers[0].answer_text;
         const strippedAnswer = answer.replace(/\s+/g, "").toLowerCase();
 
         if (guess == strippedAnswer) {

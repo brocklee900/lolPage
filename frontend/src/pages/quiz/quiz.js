@@ -24,14 +24,11 @@ function createAnswerBox(answerText) {
 
 async function displayVisualData(visualData) {
     if (visualData) {
-        const url = visualData.replace("{championName}", championName);
         const questionDisplay = document.querySelector('#questionDisplay');
-        const data = await getQuestionData(url);
         const img = document.createElement("img")
-        img.src = data.data;
+        img.src = visualData;
         questionDisplay.appendChild(img);
     }
-    
 }
 
 async function displayQuestion(questionData) {

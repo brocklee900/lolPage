@@ -6,7 +6,6 @@ const riotDragonRouter = Router();
 
 riotDragonRouter.get("/splash/random/:championName", riotDragonController.getRandomSplash);
 riotDragonRouter.get("/splash/:championName/:num", riotDragonController.getSplash);
-riotDragonRouter.get("/loading/all", riotDragonController.getAllLoading);
 riotDragonRouter.get("/loading/random/:championName", riotDragonController.getRandomLoading);
 riotDragonRouter.get("/loading/:championName/:num", riotDragonController.getLoading);
 riotDragonRouter.get("/icon/all", riotDragonController.getAllChampionIcon);
