@@ -78,7 +78,6 @@ async function checkFillBlankCorrect() {
         p.textContent = `Answer: "${correctAnswer}"`;
         answerDisplay.appendChild(p);
     }
-
 }
 
 function disableDisplays() {

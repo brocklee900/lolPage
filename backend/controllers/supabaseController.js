@@ -1,10 +1,12 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-const { getChampionAbility } = require("../cache.js");
+const { getChampionAbility, getChampionSkins } = require("../cache.js");
 
-const randInt = (length) => {
-    return Math.floor(Math.random() * (length));
+function randInt(range) {
+    let min = 0;
+    let max = range-1;
+    return Math.floor(Math.random() * (max-min+1)) + min;
 }
 
 async function getChampionEmote(req, res) {
@@ -69,6 +71,12 @@ async function retrieveQuestionData(question, championName) {
             const ability = await getChampionAbility(championName, ability_key);
             question.answers.push({id:0, is_correct: true, answer_text: ability.name});
             question.visual_data = ability.icon;
+            break
+        case "random_splash":
+            const skins = await getChampionSkins(championName);
+            const chosenSkin = skins[randInt(Object.keys(skins).length)];
+            question.answers.push({id:0, is_correct: true, answer_text: chosenSkin.name});
+            question.visual_data = chosenSkin.splash;
     }
 }
 
@@ -103,9 +111,7 @@ async function getRandomQuestionSet(req, res) {
     const data = await queryQuestions(championName);
     let questionSet = randomSet(data, num);
     for (let question of questionSet) {
-        console.log("BEFORE", question);
         await retrieveQuestionData(question, championName);
-        console.log("AFTER", question);
     }
     res.json(questionSet);
 }

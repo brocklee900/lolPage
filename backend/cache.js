@@ -146,7 +146,15 @@ async function getChampionAbility(championName, key) {
     if (cache.keys().length != 0) {
         return cache.get(championName).abilities[key.toUpperCase()];
     } else {
-        throw new Error("Failed to retrieve champion data");
+        throw new Error("Failed to retrieve ability data");
+    }
+}
+
+async function getChampionSkins(championName) {
+    if (cache.keys().length != 0) {
+        return cache.get(championName).skins;
+    } else {
+        throw new Error("Failed to retrieve skin data");
     }
 }
 
@@ -157,4 +165,5 @@ module.exports = {
     getCacheKeysSorted,
     getChampionData,
     getChampionAbility,
+    getChampionSkins,
 }
