@@ -4,7 +4,7 @@ const express = require("express");
 const path = require("path");
 const riotDragonRouter = require("./routes/riotDragonRouter");
 const supabaseRouter = require("./routes/supabaseRouter");
-const { preloadChampions } = require("./controllers/riotDragonController");
+const { preloadChampions } = require("./cache.js");
 
 
 const app = express();

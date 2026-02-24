@@ -12,7 +12,7 @@ riotDragonRouter.get("/loading/:championName/:num", riotDragonController.getLoad
 riotDragonRouter.get("/icon/all", riotDragonController.getAllChampionIcon);
 riotDragonRouter.get("/icon/:championName", riotDragonController.getChampionIcon);
 riotDragonRouter.get("/ability/image/:championName/:key", riotDragonController.getChampionAbilityImage);
-riotDragonRouter.get("/ability/:championName/:key", riotDragonController.getChampionAbility);
+riotDragonRouter.get("/ability/:championName/:key", riotDragonController.getChampionAbilityName);
 riotDragonRouter.get("/testError", (req, res) => {
     let status = 400;
     res.status(status).json({

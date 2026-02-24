@@ -1,9 +1,4 @@
-
-const fetch = require("node-fetch");
-const NodeCache = require("node-cache");
-const cache = new NodeCache();
-const {storeCache, retrieveCache} = require("./supabaseController");
-
+const { getChampionData } = require("../cache.js");
 
 function randInt(range) {
     let min = 0;
@@ -16,101 +11,6 @@ function sendError(res, message="Something went wrong", status=500) {
         error:true,
         message
     });
-}
-
-async function timeoutTest() {
-    return new Promise(resolve => setTimeout(resolve, 10000));
-}
-
-async function getLatestPatch() {
-    const response = await fetch(`https://ddragon.leagueoflegends.com/api/versions.json`);
-    if (!response.ok) {
-        throw new Error("Server response error");
-    }
-    return (await response.json())[0];
-}
-
-function getAbilities(data, patch) {
-    let abilities = {};
-    abilities['P'] = {
-        name: data.passive.name,
-        icon: `https://ddragon.leagueoflegends.com/cdn/${patch}/img/passive/${data.passive.image.full}`,
-    };
-
-    for (let ability of data.spells) {
-        abilities[ability.id.slice(-1)] = {
-            name: ability.name,
-            icon: `https://ddragon.leagueoflegends.com/cdn/${patch}/img/spell/${ability.id}.png`,
-        };
-    };
-    return abilities;
-}
-
-function getSkins(data) {
-    let skins = {};
-    let count = 0;
-    for (let skin of data.skins) {
-        skins[count] = {
-            name: skin.name,
-            splash: `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${data.id}_${skin.num}.jpg`,
-            loading: `https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${data.id}_${skin.num}.jpg`,
-        };
-        count += 1;
-    };
-    return skins;
-}
-
-async function getChampionDataDragon(championID, patch) {
-    const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion/${championID}.json`);
-    if (!response.ok) {
-        throw new Error("Server response error");
-    }
-    return (await response.json()).data[championID];
-}
-
-async function preloadChampions() {
-    const currentPatch = await getLatestPatch();
-    //retrieve collection of champions
-    try {
-        const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${currentPatch}/data/en_US/champion.json`);
-        if (!response.ok) {
-            throw new Error("Failed to fetch");
-        }
-        const championCollection = await response.json();
-
-        for (let champion of Object.keys(championCollection.data)) {
-            const generalData = championCollection.data[champion];
-            const detailedData = await getChampionDataDragon(generalData.id, currentPatch);
-
-            cache.set(generalData.id, {
-                title: generalData.title,
-                blurb: generalData.blurb,
-                icon: `https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/champion/${generalData.id}.png`,
-                skins: getSkins(detailedData),
-                abilities: getAbilities(detailedData, currentPatch),
-            });
-        };
-        storeCache(cache, currentPatch);
-        console.log("Successfully preload from Riot Dragon");
-        return;
-    } catch (error) {
-        console.log(`ERROR: ${error}`);
-        console.log("Failed preoad from Riot Dragon");
-    }
-    console.log("Start preload from supabase");
-    const data = await retrieveCache();
-    cache.mset(Object.entries(data).map(([key, value]) => ({
-        key,
-        val: value
-    })));
-}
-
-async function getChampionData(championName) {
-    if (cache.keys().length != 0) {
-        return cache.get(championName);
-    } else {
-        throw new Error("Failed to retrieve data");
-    }
 }
 
 async function getSplash(req, res) {
@@ -210,7 +110,7 @@ async function getChampionAbilityImage(req, res) {
     }
 }
 
-async function getChampionAbility(req, res) {
+async function getChampionAbilityName(req, res) {
     const { championName, key } = req.params;
     try {
         const data = await getChampionData(championName);
@@ -222,7 +122,6 @@ async function getChampionAbility(req, res) {
 }
 
 module.exports = {
-    preloadChampions,
     getSplash,
     getRandomSplash,
     getAllLoading,
@@ -231,5 +130,5 @@ module.exports = {
     getChampionIcon,
     getAllChampionIcon,
     getChampionAbilityImage,
-    getChampionAbility,
+    getChampionAbilityName,
 };

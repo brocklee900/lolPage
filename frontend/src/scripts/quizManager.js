@@ -2,7 +2,6 @@
 import { getRandomQuestionSet } from "./supabase";
 import { getQuestionData } from "./riotDragon";
 
-
 function createQuiz(name) {
     
     const championName = name;
@@ -23,6 +22,7 @@ function createQuiz(name) {
         questionSet = await getRandomQuestionSet(championName, numQuestions);
         currentQuestion = 0;
         quizState = State.INACTIVE;
+        console.log("IN QUIZMANAGER", questionSet);
     }
 
     function getNextQuestion() {
