@@ -26,6 +26,7 @@ async function displayVisualData(visualData) {
     if (visualData) {
         const questionDisplay = document.querySelector('#questionDisplay');
         const img = document.createElement("img")
+        img.classList.add("visualData");
         img.src = visualData;
         questionDisplay.appendChild(img);
     }
@@ -174,10 +175,10 @@ if (data) {
 icon.onerror = createPlaceholder;
 body.appendChild(icon);
 
-const defaultSkin = document.querySelector("img#defaultSkin");
+const defaultSkin = document.querySelector("div#defaultSkin img");
 data = await getLoading(championName, 0);
 defaultSkin.src = data.data;
-const randomSkin = document.querySelector("img#randomSkin");
+const randomSkin = document.querySelector("div#randomSkin img");
 data = await getRandomLoading(championName);
 while (data.data == defaultSkin.src) {
     data = await getRandomLoading(championName);

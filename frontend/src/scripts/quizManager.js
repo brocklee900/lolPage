@@ -54,12 +54,12 @@ function createQuiz(name) {
 
     async function checkFillBlankCorrect(guess) {
         quizState = State.WAIT_NEXT;
-        guess = guess.replace(/\s+/g, "").toLowerCase();
+        guess = guess.replace(/[^a-z0-9]/gi, "").toLowerCase();
         quizState = State.WAIT_NEXT;
         
         const question = questionSet[currentQuestion-1];
         let answer = question.answers[0].answer_text;
-        const strippedAnswer = answer.replace(/\s+/g, "").toLowerCase();
+        const strippedAnswer = answer.replace(/[^a-z0-9]/gi, "").toLowerCase();
 
         if (guess == strippedAnswer) {
             addScore();
