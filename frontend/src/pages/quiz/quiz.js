@@ -164,8 +164,7 @@ document.querySelector("div#answerDisplay").addEventListener("click", (e) => {
     }
 });
 
-const body = document.querySelector("body");
-const icon = document.createElement("img");
+const icon = document.querySelector("img#icon");
 let data = await getChampionIcon(championName);
 if (data) {
     icon.src = data.data; //data exists
@@ -173,7 +172,6 @@ if (data) {
     icon.src = data; //data doesn't exist, set to error
 }
 icon.onerror = createPlaceholder;
-body.appendChild(icon);
 
 const defaultSkin = document.querySelector("div#defaultSkin img");
 data = await getLoading(championName, 0);
@@ -185,10 +183,7 @@ while (data.data == defaultSkin.src) {
 }
 randomSkin.src = data.data;
 
-const p = document.createElement("p");
-p.textContent = championName;
-body.appendChild(p);
-
+const body = document.querySelector("body");
 const video = document.createElement("video");
 const videodata = await testSupabase(championName, 1);
 video.src = videodata.publicUrl;

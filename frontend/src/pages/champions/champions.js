@@ -2,7 +2,7 @@ import "./champions.css";
 import { getAllChampionIcon } from "../../scripts/riotDragon";
 import { getPlaceholder } from "../../scripts/error";
 
-const body = document.querySelector("body");
+const display = document.querySelector("div#championCollection");
 
 const icons = await getAllChampionIcon();
 if (icons) {
@@ -11,7 +11,7 @@ if (icons) {
     Object.keys(icons).forEach((key) => {
         let a = document.createElement("a");
         a.href = `${url}${key}`;
-        body.appendChild(a);
+        display.appendChild(a);
 
         let img = document.createElement("img");
         img.src = icons[key];
@@ -19,7 +19,7 @@ if (icons) {
 
     });
 } else {
-    body.appendChild(getPlaceholder());
+    display.appendChild(getPlaceholder());
 }
 
 

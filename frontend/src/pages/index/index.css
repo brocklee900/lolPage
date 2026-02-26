@@ -1,5 +1,18 @@
 
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
 
 h1 {
     color: red;
+}
+
+div#header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    margin: 30px;
 }

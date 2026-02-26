@@ -1,4 +1,29 @@
 
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
 h1 {
     color: blue;
+}
+
+a,
+img {
+    display: block;
+}
+
+div#header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    margin: 30px;
+}
+
+div#championCollection {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
