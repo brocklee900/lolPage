@@ -89,6 +89,7 @@ function disableDisplays() {
     const submitBtn = document.querySelector("button#submit");
     const answerDisplay = document.querySelector("div#answerDisplay");
     const inputBox = document.querySelector("#inputBox");
+    inputBox.blur();
     switch (quizState) {
         case ("INACTIVE"):
             startBtn.classList.remove("disabled");
@@ -111,6 +112,7 @@ function disableDisplays() {
             answerDisplay.classList.remove("disabled");
             inputBox.classList.remove("disabled", "inactive", "true", "false");
             inputBox.value = "";
+            inputBox.focus();
             break;
         case ("WAIT_NEXT"):
             startBtn.classList.add("disabled");
@@ -134,9 +136,8 @@ document.querySelector("button#submit").addEventListener("click", async (e) => {
     disableDisplays();
 });
 
-document.querySelector("input#inputBox").addEventListener("keydown", async (e) => {
+document.querySelector("input#inputBox").addEventListener("keyup", async (e) => {
     if (quizManager.quizState == "FILLQUESTION" && e.key == "Enter") {
-        document.querySelector("input#inputBox").blur();
         await checkFillBlankCorrect();
         disableDisplays();
     }
