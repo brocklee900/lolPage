@@ -53,7 +53,12 @@ async function getQuestionData(url) {
     return await fetchData(url);
 }
 
-
+async function getSummonerData(region, gameName, tagLine) {
+    console.log(region, gameName, tagLine);
+    const response = await fetchData(`/riotDragon/summoner/puuid/${region}/${gameName}/${tagLine}`);
+    console.log(response);
+    return;
+}
 
 export {
     getSplash,
@@ -64,4 +69,5 @@ export {
     getChampionIcon,
     getAllChampionIcon,
     getQuestionData,
+    getSummonerData,
 };

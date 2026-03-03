@@ -1,6 +1,6 @@
 
 import "./index.css";
-import { getSplash, getRandomSplash } from "../../scripts/riotDragon";
+import { getRandomSplash, getSummonerData } from "../../scripts/riotDragon";
 import { createPlaceholder } from "../../scripts/error";
 
 const img = document.querySelector(".splash");
@@ -12,3 +12,5 @@ if (data) {
 }
 
 img.onerror = createPlaceholder;
+
+await getSummonerData("americas", "Brocklee900", "INT");

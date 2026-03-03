@@ -108,6 +108,24 @@ async function getChampionAbilityName(req, res) {
     }
 }
 
+async function getSummonerPUUID(req, res) {
+    const { region, gameName, tagLine } = req.params;
+    console.log(process.env.RIOT_KEY);
+    const response = await fetch(
+        `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
+        {
+            headers: {
+                'X-Riot-Token': process.env.RIOT_KEY
+            }
+        }
+    );
+    if (!response.ok) {
+        throw new Error("Failed Account Fetch");
+    }
+    const data = await response.json();
+    res.json({data: data.puuid});
+}
+
 module.exports = {
     getSplash,
     getRandomSplash,
@@ -117,4 +135,5 @@ module.exports = {
     getAllChampionIcon,
     getChampionAbilityImage,
     getChampionAbilityName,
+    getSummonerPUUID,
 };
