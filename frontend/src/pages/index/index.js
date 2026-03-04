@@ -1,6 +1,6 @@
 
 import "./index.css";
-import { getRandomSplash, getSummonerData } from "../../scripts/riotDragon";
+import { getRandomSplash, getTopMastery } from "../../scripts/riotDragon";
 import { createPlaceholder } from "../../scripts/error";
 
 const img = document.querySelector(".splash");
@@ -13,4 +13,5 @@ if (data) {
 
 img.onerror = createPlaceholder;
 
-await getSummonerData("americas", "Brocklee900", "INT");
+const topMasteries = await getTopMastery("americas", "Brocklee900", "INT", 3);
+console.log(topMasteries);

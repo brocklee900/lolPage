@@ -53,11 +53,14 @@ async function getQuestionData(url) {
     return await fetchData(url);
 }
 
-async function getSummonerData(region, gameName, tagLine) {
-    console.log(region, gameName, tagLine);
-    const response = await fetchData(`/riotDragon/summoner/puuid/${region}/${gameName}/${tagLine}`);
-    console.log(response);
-    return;
+async function getAccountPUUID(region, gameName, tagLine) {
+    return await fetchData(`/riotDragon/account/puuid/${region}/${gameName}/${tagLine}`);
+}
+
+async function getTopMastery(region, gameName, tagLine, num) {
+    const puuid = (await getAccountPUUID(region, gameName, tagLine)).data;
+    const masteries = (await fetchData(`/riotDragon/account/mastery/top/${"na1"}/${puuid}/${num}`)).data;
+    return masteries;
 }
 
 export {
@@ -69,5 +72,5 @@ export {
     getChampionIcon,
     getAllChampionIcon,
     getQuestionData,
-    getSummonerData,
+    getTopMastery,
 };

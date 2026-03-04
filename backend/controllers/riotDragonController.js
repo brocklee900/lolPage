@@ -108,22 +108,38 @@ async function getChampionAbilityName(req, res) {
     }
 }
 
-async function getSummonerPUUID(req, res) {
+async function getAccountPUUID(req, res) {
     const { region, gameName, tagLine } = req.params;
-    console.log(process.env.RIOT_KEY);
     const response = await fetch(
         `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
-        {
-            headers: {
-                'X-Riot-Token': process.env.RIOT_KEY
-            }
-        }
+        { headers: {'X-Riot-Token': process.env.RIOT_KEY}}
     );
     if (!response.ok) {
         throw new Error("Failed Account Fetch");
     }
     const data = await response.json();
     res.json({data: data.puuid});
+}
+
+async function getTopMastery(req, res) {
+    const { platform, puuid, num } = req.params;
+    const response = await fetch(
+        `https://${platform}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=${num}`,
+        { headers: {'X-Riot-Token': process.env.RIOT_KEY}}
+    );
+    if (!response.ok) {
+        throw new Error("Failed Account Fetch");
+    }
+    const data = await response.json();
+    const masteryData = new Array();
+    for (let champion of data) {
+        masteryData.push({
+            championId: champion.championId,
+            championLevel: champion.championLevel,
+            championPoints: champion.championPoints
+        });
+    }
+    res.json({data: masteryData});
 }
 
 module.exports = {
@@ -135,5 +151,6 @@ module.exports = {
     getAllChampionIcon,
     getChampionAbilityImage,
     getChampionAbilityName,
-    getSummonerPUUID,
+    getAccountPUUID,
+    getTopMastery,
 };
