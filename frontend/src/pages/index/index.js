@@ -13,5 +13,11 @@ if (data) {
 
 img.onerror = createPlaceholder;
 
-const topMasteries = await getTopMastery("americas", "Brocklee900", "INT", 3);
-console.log(topMasteries);
+document.querySelector("#search").addEventListener("click", (e) => {
+    const platform = document.querySelector('input[name="platform"]:checked').value;
+    console.log(platform);
+});
+
+const topMasteries = await getTopMastery("na1", "Brocklee900", "INT", 3);
+
+

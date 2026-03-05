@@ -12,7 +12,7 @@ riotDragonRouter.get("/icon/all", riotDragonController.getAllChampionIcon);
 riotDragonRouter.get("/icon/:championName", riotDragonController.getChampionIcon);
 riotDragonRouter.get("/ability/image/:championName/:key", riotDragonController.getChampionAbilityImage);
 riotDragonRouter.get("/ability/:championName/:key", riotDragonController.getChampionAbilityName);
-riotDragonRouter.get("/account/puuid/:region/:gameName/:tagLine", riotDragonController.getAccountPUUID);
+riotDragonRouter.get("/account/puuid/:platform/:gameName/:tagLine", riotDragonController.getAccountPUUID);
 riotDragonRouter.get("/account/mastery/top/:platform/:puuid/:num", riotDragonController.getTopMastery);
 riotDragonRouter.get("/testError", (req, res) => {
     let status = 400;

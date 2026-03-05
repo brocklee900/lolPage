@@ -1,5 +1,19 @@
 const { getChampionData, getCacheKeysSorted } = require("../cache.js");
 
+const platformToRegion = {
+    na1: 'americas',
+    br1: 'americas',
+    la1: 'americas',
+    la2: 'americas',
+    oc1: 'americas',
+    euw1: 'europe',
+    eun1: 'europe',
+    tr1: 'europe',
+    ru: 'europe',
+    kr: 'asia',
+    jp1: 'asia',
+};
+
 function randInt(range) {
     let min = 0;
     let max = range-1;
@@ -109,7 +123,8 @@ async function getChampionAbilityName(req, res) {
 }
 
 async function getAccountPUUID(req, res) {
-    const { region, gameName, tagLine } = req.params;
+    const { platform, gameName, tagLine } = req.params;
+    const region = platformToRegion[platform];
     const response = await fetch(
         `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
         { headers: {'X-Riot-Token': process.env.RIOT_KEY}}

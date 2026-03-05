@@ -16,3 +16,30 @@ div#header {
 
     margin: 30px;
 }
+
+#platformSelect .options {
+    display: flex;
+    gap: 10px
+}
+
+.options input[type="radio"] {
+    display: none;
+}
+
+.platformOption .labelText {
+    color: #ffffff;
+    align-self: center;
+}
+
+.platformOption {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:rgb(68, 106, 231);
+    height: 50px;
+    width: 50px;
+}
+
+.platformOption:has(input:checked) {
+    background-color:rgb(32, 32, 255);
+}
