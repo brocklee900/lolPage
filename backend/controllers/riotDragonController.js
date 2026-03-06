@@ -125,36 +125,44 @@ async function getChampionAbilityName(req, res) {
 async function getAccountPUUID(req, res) {
     const { platform, gameName, tagLine } = req.params;
     const region = platformToRegion[platform];
-    const response = await fetch(
-        `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
-        { headers: {'X-Riot-Token': process.env.RIOT_KEY}}
-    );
-    if (!response.ok) {
-        throw new Error("Failed Account Fetch");
+    try {
+        const response = await fetch(
+            `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
+            { headers: {'X-Riot-Token': process.env.RIOT_KEY}}
+        );
+        if (!response.ok) {
+            throw new Error();
+        }
+        const data = await response.json();
+        res.json({data: data.puuid});
+    } catch (error) {
+        sendError(res, "Failed Account Fetch");
     }
-    const data = await response.json();
-    res.json({data: data.puuid});
 }
 
 async function getTopMastery(req, res) {
     const { platform, puuid, num } = req.params;
-    const response = await fetch(
-        `https://${platform}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=${num}`,
-        { headers: {'X-Riot-Token': process.env.RIOT_KEY}}
-    );
-    if (!response.ok) {
-        throw new Error("Failed Account Fetch");
+    try {
+        const response = await fetch(
+            `https://${platform}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=${num}`,
+            { headers: {'X-Riot-Token': process.env.RIOT_KEY}}
+        );
+        if (!response.ok) {
+            throw new Error();
+        }
+        const data = await response.json();
+        const masteryData = new Array();
+        for (let champion of data) {
+            masteryData.push({
+                championId: champion.championId,
+                championLevel: champion.championLevel,
+                championPoints: champion.championPoints
+            });
+        }
+        res.json({data: masteryData});
+    } catch (error) {
+        sendError(res, "Failed Mastery Fetch");
     }
-    const data = await response.json();
-    const masteryData = new Array();
-    for (let champion of data) {
-        masteryData.push({
-            championId: champion.championId,
-            championLevel: champion.championLevel,
-            championPoints: champion.championPoints
-        });
-    }
-    res.json({data: masteryData});
 }
 
 module.exports = {

@@ -13,11 +13,20 @@ if (data) {
 
 img.onerror = createPlaceholder;
 
-document.querySelector("#search").addEventListener("click", (e) => {
+document.querySelector("#search").addEventListener("click", async (e) => {
     const platform = document.querySelector('input[name="platform"]:checked').value;
-    console.log(platform);
+    const input = document.querySelector('#summonerSearch').value;
+    if (!(input.includes("#"))) {
+        alert("Name must contain tagline (i.e. #NA1)");
+    } else {
+        const [gameName, tagLine] = input.split('#');
+        try {
+            const topMasteries = await getTopMastery(platform, gameName, tagLine, 3);
+            console.log(topMasteries);
+        } catch (error) {
+            alert("Summoner does not exist.");
+        }
+    }
 });
-
-const topMasteries = await getTopMastery("na1", "Brocklee900", "INT", 3);
 
 
