@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 const NodeCache = require("node-cache");
 const cache = new NodeCache();
+const byID = {};
 const { createClient } = require('@supabase/supabase-js');
 const secret = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET);
 
@@ -85,6 +86,13 @@ function getSkins(data) {
     return skins;
 }
 
+function createIDCache(cache) {
+    for (const key of cache.keys()) {
+        const data = cache.get(key);
+        byID[data.id] = data;
+    }
+}
+
 async function getChampionDataDragon(championID, patch) {
     const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion/${championID}.json`);
     if (!response.ok) {
@@ -108,6 +116,8 @@ async function preloadChampions() {
             const detailedData = await getChampionDataDragon(generalData.id, currentPatch);
 
             cache.set(generalData.id, {
+                name: generalData.id,
+                id: generalData.key,
                 title: generalData.title,
                 blurb: generalData.blurb,
                 icon: `https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/champion/${generalData.id}.png`,
@@ -116,6 +126,7 @@ async function preloadChampions() {
             });
         };
         storeCache(cache, currentPatch);
+        createIDCache(cache);
         console.log("Successfully preload from Riot Dragon");
         return;
     } catch (error) {
@@ -128,6 +139,8 @@ async function preloadChampions() {
         key,
         val: value
     })));
+    createIDCache(cache);
+    return;
 }
 
 function getCacheKeysSorted() {
@@ -158,6 +171,14 @@ async function getChampionSkins(championName) {
     }
 }
 
+async function getNameByID(championID) {
+    if (Object.keys(byID).length != 0) {
+        return byID[championID].name;
+    } else {
+        throw new Error("Failed to retrieve champion name");
+    }
+}
+
 module.exports = {
     storeCache,
     retrieveCache,
@@ -166,4 +187,5 @@ module.exports = {
     getChampionData,
     getChampionAbility,
     getChampionSkins,
+    getNameByID,
 }
