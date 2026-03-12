@@ -5,10 +5,6 @@
     margin: 0px;
 }
 
-h1 {
-    color: red;
-}
-
 div#header {
     display: flex;
     align-items: center;
@@ -43,3 +39,25 @@ div#header {
 .platformOption:has(input:checked) {
     background-color:rgb(32, 32, 255);
 }
+
+div#userChampions {
+    display: flex;
+    margin: 20px;
+}
+
+div#userChampions a {
+    text-decoration: none;
+}
+
+div#userChampions a:visited {
+    color: inherit;
+}
+
+.championCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid rgb(255, 182, 26);
+}
+

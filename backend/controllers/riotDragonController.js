@@ -1,4 +1,4 @@
-const { getChampionData, getCacheKeysSorted, getNameByID } = require("../cache.js");
+const { getChampionData, getCacheKeysSorted, getChampionDataByID } = require("../cache.js");
 
 const platformToRegion = {
     na1: 'americas',
@@ -153,8 +153,10 @@ async function getTopMastery(req, res) {
         const data = await response.json();
         const masteryData = new Array();
         for (let champion of data) {
+            championData = await getChampionDataByID(champion.championId);
             masteryData.push({
-                championName: await getNameByID(champion.championId),
+                championName: championData.name,
+                championID: championData.id,
                 championLevel: champion.championLevel,
                 championPoints: champion.championPoints
             });

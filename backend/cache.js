@@ -89,7 +89,7 @@ function getSkins(data) {
 function createIDCache(cache) {
     for (const key of cache.keys()) {
         const data = cache.get(key);
-        byID[data.id] = data;
+        byID[data.key] = data;
     }
 }
 
@@ -114,10 +114,11 @@ async function preloadChampions() {
         for (let champion of Object.keys(championCollection.data)) {
             const generalData = championCollection.data[champion];
             const detailedData = await getChampionDataDragon(generalData.id, currentPatch);
-
+            
             cache.set(generalData.id, {
-                name: generalData.id,
-                id: generalData.key,
+                name: generalData.name,
+                id: generalData.id,
+                key: generalData.key,
                 title: generalData.title,
                 blurb: generalData.blurb,
                 icon: `https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/champion/${generalData.id}.png`,
@@ -155,6 +156,14 @@ function getChampionData(championName) {
     }
 }
 
+async function getChampionDataByID(championID) {
+    if (Object.keys(byID).length != 0) {
+        return byID[championID];
+    } else {
+        throw new Error("Failed to retrieve champion name");
+    }
+}
+
 async function getChampionAbility(championName, key) {
     if (cache.keys().length != 0) {
         return cache.get(championName).abilities[key.toUpperCase()];
@@ -171,14 +180,6 @@ async function getChampionSkins(championName) {
     }
 }
 
-async function getNameByID(championID) {
-    if (Object.keys(byID).length != 0) {
-        return byID[championID].name;
-    } else {
-        throw new Error("Failed to retrieve champion name");
-    }
-}
-
 module.exports = {
     storeCache,
     retrieveCache,
@@ -187,5 +188,5 @@ module.exports = {
     getChampionData,
     getChampionAbility,
     getChampionSkins,
-    getNameByID,
+    getChampionDataByID,
 }
