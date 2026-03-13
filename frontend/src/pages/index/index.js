@@ -16,7 +16,6 @@ img.onerror = createPlaceholder;
 async function createChampionCards(topMasteries) {
     const url = "/quiz?champion=";
     const display = document.querySelector("#userChampions");
-    display.replaceChildren();
     for (let mastery of topMasteries) {
 
         let a = document.createElement("a");
@@ -43,18 +42,25 @@ async function createChampionCards(topMasteries) {
     }
 };
 
+function displayError(error) {
+    const errorDisplay = document.querySelector("#errorMessage");
+    errorDisplay.textContent = error;
+}
+
 document.querySelector("#search").addEventListener("click", async (e) => {
     const platform = document.querySelector('input[name="platform"]:checked').value;
     const input = document.querySelector('#summonerSearch').value;
+    document.querySelector("#userChampions").replaceChildren();
     if (!(input.includes("#"))) {
-        alert("Name must contain tagline (i.e. #NA1)");
+        displayError("Name must contain tagline (i.e. #NA1)");
     } else {
         const [gameName, tagLine] = input.split('#');
         try {
             const topMasteries = await getTopMastery(platform, gameName, tagLine, 3);
             createChampionCards(topMasteries);
+            displayError("");
         } catch (error) {
-            alert("Summoner does not exist.");
+            displayError("Summoner does not exist");
         }
     }
 });

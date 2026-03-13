@@ -53,6 +53,14 @@ div#userChampions a:visited {
     color: inherit;
 }
 
+div#userChampions a {
+    color: black;
+}
+
+#errorMessage {
+    color: red;
+}
+
 .championCard {
     display: flex;
     flex-direction: column;

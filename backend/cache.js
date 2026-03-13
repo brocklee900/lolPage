@@ -63,6 +63,7 @@ function getAbilities(data, patch) {
         icon: `https://ddragon.leagueoflegends.com/cdn/${patch}/img/passive/${data.passive.image.full}`,
     };
 
+    console.log(data.spells);
     for (let ability of data.spells) {
         abilities[ability.id.slice(-1)] = {
             name: ability.name,
@@ -165,6 +166,7 @@ async function getChampionDataByID(championID) {
 }
 
 async function getChampionAbility(championName, key) {
+    console.log(key.toUpperCase());
     if (cache.keys().length != 0) {
         return cache.get(championName).abilities[key.toUpperCase()];
     } else {

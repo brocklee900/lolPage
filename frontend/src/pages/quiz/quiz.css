@@ -91,19 +91,11 @@ button#submit {
 }
 
 div.border {
-    height: 600px;
-    width: 200px;
     overflow: hidden;
-    min-height: 500px;
-    min-width: 200px;
 }
 
 div.border img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    object-position: center;
-    transform: scale(1.075);
+
 }
 
 img.visualData {

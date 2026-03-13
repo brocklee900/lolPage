@@ -108,6 +108,7 @@ async function getRandomQuestion(req, res) {
 
 async function getRandomQuestionSet(req, res) {
     const {championName, num} = req.params;
+    console.log(championName, num);
     const data = await queryQuestions(championName);
     let questionSet = randomSet(data, num);
     for (let question of questionSet) {
