@@ -63,12 +63,14 @@ function getAbilities(data, patch) {
         icon: `https://ddragon.leagueoflegends.com/cdn/${patch}/img/passive/${data.passive.image.full}`,
     };
 
-    console.log(data.spells);
+    let keys = ['Q', 'W', 'E', 'R'];
+    let count = 0
     for (let ability of data.spells) {
-        abilities[ability.id.slice(-1)] = {
+        abilities[keys[count]] = {
             name: ability.name,
             icon: `https://ddragon.leagueoflegends.com/cdn/${patch}/img/spell/${ability.id}.png`,
         };
+        count += 1;
     };
     return abilities;
 }
@@ -166,7 +168,6 @@ async function getChampionDataByID(championID) {
 }
 
 async function getChampionAbility(championName, key) {
-    console.log(key.toUpperCase());
     if (cache.keys().length != 0) {
         return cache.get(championName).abilities[key.toUpperCase()];
     } else {
