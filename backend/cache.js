@@ -79,12 +79,14 @@ function getSkins(data) {
     let skins = {};
     let count = 0;
     for (let skin of data.skins) {
-        skins[count] = {
-            name: skin.name,
-            splash: `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${data.id}_${skin.num}.jpg`,
-            loading: `https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${data.id}_${skin.num}.jpg`,
-        };
-        count += 1;
+        if (skin.parentSkin == undefined) { //Do not include chromas of skins
+            skins[count] = {
+                name: skin.name,
+                splash: `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${data.id}_${skin.num}.jpg`,
+                loading: `https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${data.id}_${skin.num}.jpg`,
+            };
+            count += 1;
+        }
     };
     return skins;
 }
