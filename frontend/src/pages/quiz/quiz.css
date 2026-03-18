@@ -28,6 +28,8 @@ div#quizDisplay {
     display: flex;
     flex: auto;
     flex-direction: column;
+
+    font-size: 1.5rem;
 }
 
 div#questionDisplay {
@@ -47,8 +49,9 @@ div#questionDisplay {
 }
 
 .answerBox {
-    border: 5px solid black;
-    border-radius: 2px
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px 10px;
 }
 
 #inputBox {
@@ -60,12 +63,20 @@ div#questionDisplay {
 #answerDisplay {
     display: flex;
     flex-direction: column;
+    align-items: center;
     border: 1px solid blue;
     padding: 20px;
 }
 
 #answerDisplay.disabled {
     opacity: 1;
+}
+
+#answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px;
 }
 
 #inputBox.inactive {
@@ -90,13 +101,6 @@ button#submit {
     align-self: center;
 }
 
-div.border {
-    overflow: hidden;
-}
-
-div.border img {
-
-}
 
 img.visualData {
     max-width: 960px;

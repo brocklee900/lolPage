@@ -13,7 +13,7 @@ const quizManager = createQuiz(championName);
 disableDisplays();
 
 function createAnswerBox(answerText) {
-    const answerDisplay = document.querySelector('#answerDisplay');
+    const answerDisplay = document.querySelector('#answers');
     let div = document.createElement('div');
     div.classList.add("answerBox");
     let text = document.createElement('p');
@@ -35,8 +35,10 @@ async function displayVisualData(visualData) {
 async function displayQuestion(questionData) {
     const qText = document.querySelector('#questionDisplay p');
     const inputBox = document.querySelector('input#inputBox');
+    const answers = document.querySelector("#answers");
     document.querySelector('#questionDisplay').replaceChildren(qText);
-    document.querySelector('#answerDisplay').replaceChildren(inputBox);
+    document.querySelector('#answerDisplay').replaceChildren(inputBox, answers);
+    answers.replaceChildren();
 
     qText.textContent = questionData.question_text.replace("{championName}", championName);
 
@@ -60,7 +62,7 @@ function checkMultipleChoiceCorrect(guess) {
         guess.classList.add("true");
     } else {
         guess.classList.add("false");
-        let answers = [...document.querySelector("div#answerDisplay")
+        let answers = [...document.querySelector("div#answers")
             .querySelectorAll(":scope > div")]; //exclude inputbox
         let correctDiv = answers.find(a => a.querySelector("p").textContent == correctAnswer);
         correctDiv.classList.add("true");
@@ -151,14 +153,15 @@ document.querySelector("button#next").addEventListener("click", (e) => {
     } else {
         let score = document.createElement("p");
         score.textContent = `Score: ${quizManager.score}/${NUM_QUESTIONS}`;
-        const input = document.querySelector("input#inputBox");
-        document.querySelector("div#answerDisplay").replaceChildren(score, input);
+        document.querySelector("div#answerDisplay").replaceChildren(score);
+        document.querySelector("#questionDisplay").replaceChildren(document.createElement("p"));
         disableDisplays();
     };
 });
 
-document.querySelector("div#answerDisplay").addEventListener("click", (e) => {
+document.querySelector("div#answers").addEventListener("click", (e) => {
     let guess = e.target.closest(".answerBox");
+    console.log(guess);
     if (guess) { //Check to make sure one of answer boxes was clicked and not empty space
         checkMultipleChoiceCorrect(guess);
         disableDisplays();
