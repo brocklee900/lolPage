@@ -22,6 +22,7 @@ function createQuiz(name) {
         questionSet = await getRandomQuestionSet(championName, numQuestions);
         currentQuestion = 0;
         quizState = State.INACTIVE;
+        score = 0;
         console.log("IN QUIZMANAGER", questionSet);
     }
 
@@ -55,7 +56,6 @@ function createQuiz(name) {
     async function checkFillBlankCorrect(guess) {
         quizState = State.WAIT_NEXT;
         guess = guess.replace(/[^a-z0-9]/gi, "").toLowerCase();
-        quizState = State.WAIT_NEXT;
         
         const question = questionSet[currentQuestion-1];
         let answer = question.answers[0].answer_text;

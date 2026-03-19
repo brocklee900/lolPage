@@ -85,6 +85,7 @@ async function checkFillBlankCorrect() {
 
 function disableDisplays() {
     const quizState = quizManager.quizState;
+    console.log(quizState);
 
     const startBtn = document.querySelector("button#start");
     const nextBtn = document.querySelector("button#next");
@@ -153,7 +154,10 @@ document.querySelector("button#next").addEventListener("click", (e) => {
     } else {
         let score = document.createElement("p");
         score.textContent = `Score: ${quizManager.score}/${NUM_QUESTIONS}`;
-        document.querySelector("div#answerDisplay").replaceChildren(score);
+        document.querySelector("div#answerDisplay").replaceChildren(score, 
+            document.querySelector("#inputBox"), 
+            document.querySelector("#answers"));
+        document.querySelector("#answers").replaceChildren();
         document.querySelector("#questionDisplay").replaceChildren(document.createElement("p"));
         disableDisplays();
     };
