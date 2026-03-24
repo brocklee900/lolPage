@@ -3,6 +3,7 @@ import "./index.css";
 import { getRandomSplash, getTopMastery, getChampionIcon } from "../../scripts/riotDragon";
 import { createPlaceholder } from "../../scripts/error";
 
+/*
 const img = document.querySelector(".splash");
 const data = await getRandomSplash("Zoe");
 if (data) {
@@ -12,6 +13,7 @@ if (data) {
 }
 
 img.onerror = createPlaceholder;
+*/
 
 async function createChampionCards(topMasteries) {
     const url = "/quiz?champion=";
@@ -48,7 +50,7 @@ function displayError(error) {
 }
 
 document.querySelector("#search").addEventListener("click", async (e) => {
-    const platform = document.querySelector('input[name="platform"]:checked').value;
+    const platform = document.querySelector("select#platform").value;
     const input = document.querySelector('#summonerSearch').value;
     document.querySelector("#userChampions").replaceChildren();
     if (!(input.includes("#"))) {
