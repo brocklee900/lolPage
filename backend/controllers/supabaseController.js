@@ -74,7 +74,7 @@ async function retrieveQuestionData(question, championName) {
             break
         case "random_splash":
             const skins = await getChampionSkins(championName);
-            const chosenSkin = skins[randInt(Object.keys(skins).length)];
+            const chosenSkin = skins[randInt(Object.keys(skins).length-1)+1]; //don't include base skin
             question.answers.push({id:0, is_correct: true, answer_text: chosenSkin.name});
             question.visual_data = chosenSkin.splash;
     }
