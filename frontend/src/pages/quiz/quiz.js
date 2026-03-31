@@ -78,7 +78,7 @@ async function checkFillBlankCorrect() {
         inputBox.classList.add("false");
         const answerDisplay = document.querySelector("div#answerDisplay");
         const p = document.createElement("p");
-        p.textContent = `Answer: "${correctAnswer}"`;
+        p.textContent = `Answer: ${correctAnswer}`;
         answerDisplay.appendChild(p);
     }
 }

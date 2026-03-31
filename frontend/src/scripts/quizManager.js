@@ -59,9 +59,17 @@ function createQuiz(name) {
         
         const question = questionSet[currentQuestion-1];
         let answer = question.answers[0].answer_text;
-        const strippedAnswer = answer.replace(/[^a-z0-9]/gi, "").toLowerCase();
+        let strippedAnswer1 = undefined;
+        let strippedAnswer2 = undefined;
+        if (answer.includes("/")) { //Account for champions who have multiple ability names for 1 key
+            [strippedAnswer1, strippedAnswer2] = answer.split("/");
+            strippedAnswer1 = strippedAnswer1.replace(/[^a-z0-9]/gi, "").toLowerCase();
+            strippedAnswer2 = strippedAnswer2.replace(/[^a-z0-9]/gi, "").toLowerCase();
+        } else {
+            strippedAnswer1 = answer.replace(/[^a-z0-9]/gi, "").toLowerCase();
+        }
 
-        if (guess == strippedAnswer) {
+        if (guess == strippedAnswer1 || guess == strippedAnswer2) {
             addScore();
             return [true, answer];
         } else {
