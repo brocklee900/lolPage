@@ -32,6 +32,14 @@ async function displayVisualData(visualData) {
     }
 }
 
+function shuffle(array) {//fisher-yates method
+    for (let i = array.length-1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i+1));
+        [array[i], array[j]] = [array[j], array[i]]
+    }
+    return array;
+}
+
 async function displayQuestion(questionData) {
     const qText = document.querySelector('#questionDisplay p');
     const inputBox = document.querySelector('input#inputBox');
@@ -45,7 +53,8 @@ async function displayQuestion(questionData) {
     if (questionData.question_type == 'multiple') {
         console.log("MULTIPLE CHOICE QUESTION");
         console.log("PULL ANSWER FROM SUPABASE");
-        for (const answer of questionData.answers) {
+        const shuffledAnswers = shuffle(questionData.answers);
+        for (const answer of shuffledAnswers) {
             createAnswerBox(answer.answer_text);
         }
     } else { //question_type == 'fill'
