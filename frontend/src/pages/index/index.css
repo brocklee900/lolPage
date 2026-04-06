@@ -13,6 +13,26 @@ div#header {
     margin: 30px;
 }
 
+.dropdown { 
+    position: relative; 
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    background: white;
+    border: 1px solid #ccc;
+    min-width: 150px;
+}
+
+.dropdown-menu.open {
+    display: block;
+}
+
 div#searchBar {
     display: flex;
     padding: 10px;

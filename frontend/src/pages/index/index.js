@@ -50,7 +50,7 @@ function displayError(error) {
 }
 
 document.querySelector("#search").addEventListener("click", async (e) => {
-    const platform = document.querySelector("select#platform").value;
+    const platform = document.querySelector("#searchBar .dropdown .dropdown-toggle").textContent.slice(0,-2).toLowerCase();
     const input = document.querySelector('#summonerSearch').value;
     document.querySelector("#userChampions").replaceChildren();
     if (!(input.includes("#"))) {
@@ -66,5 +66,24 @@ document.querySelector("#search").addEventListener("click", async (e) => {
         }
     }
 });
+
+const toggle = document.querySelector('.dropdown-toggle');
+const menu = document.querySelector('.dropdown-menu');
+toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menu.classList.toggle('open');
+});
+
+document.addEventListener('click', () => {
+    menu.classList.remove('open');
+})
+
+menu.addEventListener('click', (e) => {
+    if (e.target.tagName === "LI") {
+        toggle.textContent = e.target.textContent + ' \u25BE';
+        menu.classList.remove('open');
+        console.log(toggle.textContent);
+    }
+})
 
 
