@@ -18,7 +18,7 @@ div#header {
     display: inline-block;
 }
 
-.dropdown-menu {
+.dropdownMenu {
     display: none;
     position: absolute;
     top: 100%;
@@ -26,11 +26,24 @@ div#header {
     list-style: none;
     background: white;
     border: 1px solid #ccc;
-    min-width: 150px;
+    min-width: 130px;
+    text-align: center;
 }
 
-.dropdown-menu.open {
+.dropdownToggle {
+    min-width: 130px;
+    padding: 10px;
+}
+
+.dropdownMenu.open {
     display: block;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.dropdownMenu li:hover {
+    background-color: blue;
+    color: white;
 }
 
 div#searchBar {
@@ -40,12 +53,11 @@ div#searchBar {
 
 #searchBar * {
     font-size: 1.75rem;
-    padding: 5px;
 }
 
-#searchBar select {
-    max-height: 150px;
-    overflow-y: auto;
+button#search,
+#summonerSearch {
+    padding: 10px;
 }
 
 div#userChampions {

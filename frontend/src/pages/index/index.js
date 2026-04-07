@@ -50,7 +50,7 @@ function displayError(error) {
 }
 
 document.querySelector("#search").addEventListener("click", async (e) => {
-    const platform = document.querySelector("#searchBar .dropdown .dropdown-toggle").textContent.slice(0,-2).toLowerCase();
+    const platform = document.querySelector("#searchBar .dropdown .dropdownToggle").textContent.slice(0,-2).toLowerCase();
     const input = document.querySelector('#summonerSearch').value;
     document.querySelector("#userChampions").replaceChildren();
     if (!(input.includes("#"))) {
@@ -67,8 +67,8 @@ document.querySelector("#search").addEventListener("click", async (e) => {
     }
 });
 
-const toggle = document.querySelector('.dropdown-toggle');
-const menu = document.querySelector('.dropdown-menu');
+const toggle = document.querySelector('.dropdownToggle');
+const menu = document.querySelector('.dropdownMenu');
 toggle.addEventListener('click', (e) => {
     e.stopPropagation();
     menu.classList.toggle('open');
